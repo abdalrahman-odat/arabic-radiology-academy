@@ -1,0 +1,83 @@
+import { motion } from "framer-motion";
+import { GraduationCap, Hospital, Award } from "lucide-react";
+
+const AboutSection = () => {
+  return (
+    <section id="about" className="py-20 md:py-28 bg-muted/30">
+      <div className="container px-4">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-primary text-glow-primary mb-6">
+              عن المدرب
+            </h2>
+            <h3 className="text-2xl font-bold text-foreground mb-4">عبدالله عودات</h3>
+            <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+              مدرب متخصص في مجال الأشعة التشخيصية، يمتلك خبرة واسعة في التعليم الأكاديمي
+              والتدريب السريري. يسعى دائماً لنقل المعرفة العملية والنظرية لفنيي الأشعة
+              بأسلوب مبسّط وعملي.
+            </p>
+
+            <div className="space-y-4">
+              {[
+                {
+                  icon: GraduationCap,
+                  title: "ماجستير في تخصص الأشعة",
+                  desc: "شهادة أكاديمية متقدمة في علوم الأشعة التشخيصية",
+                },
+                {
+                  icon: Hospital,
+                  title: "مدرب سريري في المستشفى السعودي",
+                  desc: "خبرة عملية مباشرة في بيئة المستشفى",
+                },
+                {
+                  icon: Award,
+                  title: "أكثر من 500 متدرب",
+                  desc: "سجل حافل في تأهيل فنيي الأشعة المحترفين",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 p-4 rounded-lg bg-card border border-border"
+                >
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+                    <item.icon className="w-5 h-5 text-secondary" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-foreground">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Visual side */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center"
+          >
+            <div className="relative w-72 h-72 md:w-96 md:h-96">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 blur-2xl" />
+              <div className="relative w-full h-full rounded-2xl border-2 border-secondary/30 bg-card flex flex-col items-center justify-center gap-4 border-glow">
+                <GraduationCap className="w-20 h-20 text-primary" />
+                <span className="text-2xl font-black text-foreground">عبدالله عودات</span>
+                <span className="text-sm text-secondary font-medium">أكاديمية دورات الأشعة</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default AboutSection;
