@@ -1,13 +1,10 @@
 import { motion } from "framer-motion";
-import { Award, BookOpen, Stethoscope } from "lucide-react";
+import { Award, BookOpen, Users } from "lucide-react";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/30" />
-      
-      {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-secondary/5 blur-3xl" />
 
@@ -17,29 +14,27 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/10 px-4 py-2 mb-8">
             <Award className="w-4 h-4 text-secondary" />
-            <span className="text-sm text-secondary font-medium">شهادات معتمدة</span>
+            <span className="text-sm text-secondary font-medium">شهادات معتمدة من المعهد الكندي</span>
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 text-glow-primary">
-            <span className="text-primary">طوّر مسيرتك المهنية</span>
+            <span className="text-primary">أكاديمية دورات الأشعة</span>
             <br />
-            <span className="text-foreground">في مجال الأشعة التشخيصية</span>
+            <span className="text-foreground">طوّر مسيرتك المهنية في التصوير الطبي</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            دورات تدريبية متخصصة ومعتمدة في الأشعة المقطعية والرنين المغناطيسي
-            مع المدرب عبدالله عودات — ماجستير في تخصص الأشعة
+            دورات تدريبية احترافية ومعتمدة في CT و X-Ray
+            مع الأستاذ عبدالله عودات — ماجستير في تخصص الأشعة ومدرب سريري في المستشفى السعودي
           </p>
 
-          {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
             {[
-              { icon: BookOpen, label: "دورة تدريبية", value: "+10" },
-              { icon: Stethoscope, label: "متدرب ناجح", value: "+500" },
-              { icon: Award, label: "سنوات خبرة", value: "+8" },
+              { icon: Users, label: "طالب ناجح", value: "+200" },
+              { icon: BookOpen, label: "دفعة ناجحة", value: "12" },
+              { icon: Award, label: "شهادة معتمدة", value: "كندية" },
             ].map((stat, i) => (
               <motion.div
                 key={i}

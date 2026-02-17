@@ -1,50 +1,54 @@
 import { motion } from "framer-motion";
-import { Clock, Users, CalendarDays, MessageCircle } from "lucide-react";
+import { Clock, Users, CalendarDays, MessageCircle, Award, BookOpen } from "lucide-react";
 
 interface Course {
   title: string;
   description: string;
   price: string;
-  seats: number;
+  totalSeats: number;
   startDate: string;
-  endDate: string;
+  registrationEnd: string;
+  duration: string;
   icon: string;
+  stats?: string;
+  certification: string;
+  whatsappMessage: string;
 }
 
 const courses: Course[] = [
   {
-    title: "الأشعة المقطعية للدماغ",
-    description: "دورة شاملة في تحليل وقراءة صور الأشعة المقطعية للدماغ مع حالات سريرية واقعية",
-    price: "150 دينار",
-    seats: 5,
-    startDate: "2026-03-01",
-    endDate: "2026-03-15",
+    title: "دورة CT 1 الاحترافية",
+    description: "تعلم بناء بروتوكولات التصوير، فهم جهاز الـ CT بعمق، وإتقان فن التصوير.",
+    price: "$60",
+    totalSeats: 40,
+    startDate: "1/3/2026",
+    registrationEnd: "19/2/2026",
+    duration: "شهر واحد",
     icon: "🧠",
+    stats: "تم تقديمها 12 مرة لـ 200+ طالب",
+    certification: "شهادة معتمدة من المعهد الكندي",
+    whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة CT 1 الاحترافية",
   },
   {
-    title: "الرنين المغناطيسي للبطن",
-    description: "تعلم أساسيات وتقنيات التصوير بالرنين المغناطيسي لمنطقة البطن والحوض",
-    price: "200 دينار",
-    seats: 8,
-    startDate: "2026-04-01",
-    endDate: "2026-04-20",
-    icon: "🫁",
-  },
-  {
-    title: "أشعة الطوارئ",
-    description: "دورة متقدمة في قراءة صور الأشعة في حالات الطوارئ والإصابات الحرجة",
-    price: "180 دينار",
-    seats: 3,
-    startDate: "2026-05-01",
-    endDate: "2026-05-18",
-    icon: "🚑",
+    title: "دورة X-Ray الشاملة",
+    description: "إتقان 166 وضعية تصوير، التعرف على 140 مرض وكسر، محتوى مستخلص من 250+ مرجع.",
+    price: "$75",
+    totalSeats: 40,
+    startDate: "1/3/2026",
+    registrationEnd: "19/2/2026",
+    duration: "شهر واحد",
+    icon: "📸",
+    certification: "شهادة معتمدة من المعهد الكندي",
+    whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
   },
 ];
 
+const WHATSAPP_NUMBER = "962795418245";
+
 const CoursesSection = () => {
-  const handleWhatsApp = (courseTitle: string) => {
-    const message = encodeURIComponent(`مرحباً، أرغب بالتسجيل في دورة: ${courseTitle}`);
-    window.open(`https://wa.me/962770000000?text=${message}`, "_blank");
+  const handleWhatsApp = (message: string) => {
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, "_blank");
   };
 
   return (
@@ -64,7 +68,7 @@ const CoursesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {courses.map((course, i) => (
             <motion.div
               key={i}
@@ -74,35 +78,44 @@ const CoursesSection = () => {
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className="bg-card rounded-xl border border-border p-6 card-hover relative overflow-hidden group"
             >
-              {/* Glow accent on top */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-primary via-primary to-secondary" />
 
               <div className="text-5xl mb-4">{course.icon}</div>
               <h3 className="text-xl font-bold text-foreground mb-2">{course.title}</h3>
-              <p className="text-muted-foreground text-sm mb-6 leading-relaxed">{course.description}</p>
+              <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{course.description}</p>
 
-              {/* Details */}
+              {course.stats && (
+                <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+                  <BookOpen className="w-4 h-4 flex-shrink-0" />
+                  <span className="font-medium">{course.stats}</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+                <Award className="w-4 h-4 flex-shrink-0" />
+                <span className="font-medium">{course.certification}</span>
+              </div>
+
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-2xl font-black text-primary">{course.price}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-secondary">
                   <Users className="w-4 h-4" />
-                  <span className="font-medium">بقي {course.seats} مقاعد فقط</span>
+                  <span className="font-medium">بدأت بـ {course.totalSeats} مقعداً — بقي عدد محدود من المقاعد</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CalendarDays className="w-4 h-4" />
-                  <span>يبدأ: {course.startDate}</span>
+                  <span>تبدأ: {course.startDate} | المدة: {course.duration}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-primary">
                   <Clock className="w-4 h-4" />
-                  <span>ينتهي: {course.endDate}</span>
+                  <span className="font-bold">ينتهي التسجيل: {course.registrationEnd}</span>
                 </div>
               </div>
 
-              {/* CTA */}
               <button
-                onClick={() => handleWhatsApp(course.title)}
+                onClick={() => handleWhatsApp(course.whatsappMessage)}
                 className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
               >
                 <MessageCircle className="w-5 h-5" />
