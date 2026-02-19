@@ -24,7 +24,7 @@ const courses: Course[] = [
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
     duration: "شهر واحد",
-    icon: "🧠",
+    
     stats: "تم تقديمها 12 مرة لـ 200+ طالب",
     certification: "شهادة معتمدة من المعهد الكندي",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة CT 1 الاحترافية",
@@ -37,7 +37,7 @@ const courses: Course[] = [
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
     duration: "شهر واحد",
-    icon: "📸",
+    
     certification: "شهادة معتمدة من المعهد الكندي",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
   },
