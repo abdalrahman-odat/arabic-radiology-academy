@@ -82,16 +82,15 @@ const CoursesSection = () => {
 
 <div className="text-5xl mb-4">{course.icon}</div>
 <h3 className="text-xl font-bold text-foreground mb-2">{course.title}</h3>
-
-{/* 1. نقلنا "تم تقديمها..." لتكون تحت العنوان مباشرة */}
+{/* 1. البوكس الأول (تم تقديمها...) صار الآن برتقالي (Primary) */}
 {course.stats && (
-  <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+  <div className="flex items-center gap-2 text-sm text-primary mb-4 bg-primary/10 rounded-lg px-3 py-2">
     <BookOpen className="w-4 h-4 flex-shrink-0" />
     <span className="font-medium">{course.stats}</span>
   </div>
 )}
 
-{/* 2. تقسيم الوصف لمربعات خضراء منفصلة (كل جملة ببوكس) */}
+{/* 2. مربعات الوصف تحتها تبقى باللون الأخضر (Secondary) */}
 <div className="space-y-2 mb-6">
   {course.description.split('،').map((item, index) => (
     <div key={index} className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-lg px-3 py-2 border border-secondary/10">
@@ -101,13 +100,13 @@ const CoursesSection = () => {
   ))}
 </div>
 
+{/* 3. بوكس الشهادة (يظهر فقط إذا كان النص موجوداً) */}
 {course.certification && (
   <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
     <Award className="w-4 h-4 flex-shrink-0" />
     <span className="font-medium">{course.certification}</span>
   </div>
 )}
-
 <div className="space-y-3 mb-6">
   {/* 3. تم حذف سطر السعر بناءً على طلبك */}
   <div className="flex items-center gap-2 text-sm text-secondary">
