@@ -108,34 +108,19 @@ const CoursesSection = () => {
   </div>
 )}
 <div className="space-y-3 mb-6">
-  {/* 3. تم حذف سطر السعر بناءً على طلبك */}
-  <div className="flex items-center gap-2 text-sm text-secondary">
-  <Users className="w-4 h-4" />
-  <span className="font-medium">المقاعد محدوده - التسجيل متاح</span>
 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CalendarDays className="w-4 h-4" />
-                  <span>تبدأ: {course.startDate} | المدة: {course.duration}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-primary">
-                  <Clock className="w-4 h-4" />
-                  <span className="font-bold">ينتهي التسجيل: {course.registrationEnd}</span>
-                </div>
-              </div>
 
-              <button
-                onClick={() => handleWhatsApp(course.whatsappMessage)}
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
-              >
-                <MessageCircle className="w-5 h-5" />
-                سجل الآن عبر واتساب
-              </button>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+          {/* حالة التسجيل مغلق باللون الأحمر مع حذف المواعيد والزر */}
+          <div className="flex items-center gap-2 text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2 mt-4">
+            <Users className="w-4 h-4" />
+            <span className="font-medium">التسجيل مغلق</span>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
+);
 };
 
 export default CoursesSection;
