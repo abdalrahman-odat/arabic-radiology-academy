@@ -36,8 +36,8 @@ const HeroSection = () => {
 
             <div className="flex flex-wrap justify-center md:justify-start gap-8 md:gap-12">
               {[
-                { icon: Users, label: "طالب ناجح", value: "+200" },
-                { icon: BookOpen, label: "دفعة ناجحة", value: "12" },
+                { icon: Users, label: "طالب ناجح", value: "+300" },
+                { icon: BookOpen, label: "دفعة ناجحة", value: "17" },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
