@@ -18,12 +18,12 @@ interface Course {
 const courses: Course[] = [
   {
     title: "دورة CT 1 الاحترافية",
-    description: "تعلم بناء بروتوكولات التصوير، فهم فيزياء جهاز الـ CT بعمق، التعرف على اكثر من 40 مرض.",
+    description: "تعلم بناء بروتوكولات التصوير، فهم فيزياء جهاز الـ CT بعمق، التعرف على اكثر من 40 مرض",
     price: "$80",
     totalSeats: 40,
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
-    duration: "شهر واحد",
+    duration: "شهرين",
     
     stats: "تم تقديمها 13 مرة لـ 200+ طالب",
     certification: "شهادة معتمدة من المعهد الكندي",
@@ -36,7 +36,7 @@ const courses: Course[] = [
     totalSeats: 40,
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
-    duration: "شهر واحد",
+    duration: "شهرين",
     certification: "",
     stats: "تم تقديمها 4 مرة لـ 80+ طالب",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
