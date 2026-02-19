@@ -24,7 +24,7 @@ const HeroSection = () => {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 text-glow-primary">
-              <span className="text-primary">أكاديمية دورات الأشعة</span>
+              <span className="text-primary">AOT of Radiology</span>
               <br />
               <span className="text-foreground">طوّر مسيرتك المهنية في التصوير الطبي</span>
             </h1>
