@@ -18,7 +18,7 @@ interface Course {
 const courses: Course[] = [
   {
     title: "دورة CT 1 الاحترافية",
-    description: "تعلم بناء بروتوكولات التصوير، فهم جهاز الـ CT بعمق، وإتقان فن التصوير.",
+    description: "تعلم بناء بروتوكولات التصوير، فهم فيزياء جهاز الـ CT بعمق، التعرف على اكثر من 40 مرض.",
     price: "$80",
     totalSeats: 40,
     startDate: "1/3/2026",
