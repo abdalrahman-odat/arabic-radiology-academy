@@ -38,7 +38,7 @@ const courses: Course[] = [
     registrationEnd: "19/2/2026",
     duration: "شهر واحد",
     
-    certification: "شهادة معتمدة من المعهد الكندي",
+    stats: "تم تقديمها 4 مرة لـ 80+ طالب",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
   },
 ];
