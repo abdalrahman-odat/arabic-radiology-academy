@@ -19,7 +19,7 @@ const courses: Course[] = [
   {
     title: "دورة CT 1 الاحترافية",
     description: "تعلم بناء بروتوكولات التصوير، فهم جهاز الـ CT بعمق، وإتقان فن التصوير.",
-    price: "$60",
+    price: "$80",
     totalSeats: 40,
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
@@ -32,12 +32,12 @@ const courses: Course[] = [
   {
     title: "دورة X-Ray الشاملة",
     description: "إتقان 166 وضعية تصوير، التعرف على 140 مرض وكسر، محتوى مستخلص من 250+ مرجع.",
-    price: "$75",
+    price: "$60",
     totalSeats: 40,
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
     duration: "شهر واحد",
-    
+    certification: "",
     stats: "تم تقديمها 4 مرة لـ 80+ طالب",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
   },
