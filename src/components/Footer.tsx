@@ -1,4 +1,5 @@
-import { MessageCircle, Mail, Phone } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 const WHATSAPP_NUMBER = "962795418245";
 
@@ -8,7 +9,7 @@ const Footer = () => {
       <div className="container px-4">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-black text-primary mb-3">AOT of Radiology</h3>
+            <img src={logoImg} alt="أكاديمية دورات الأشعة" className="h-14 mb-3" />
             <p className="text-muted-foreground text-sm leading-relaxed">
               دورات تدريبية احترافية ومعتمدة في مجال الأشعة التشخيصية مع الأستاذ عبدالله عودات
             </p>
@@ -28,7 +29,7 @@ const Footer = () => {
             <div className="space-y-2 text-sm">
               <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="flex items-center gap-2 text-muted-foreground hover:text-secondary transition-colors">
                 <MessageCircle className="w-4 h-4" />
-                واتساب: 0708148303
+                واتساب: 0795418245
               </a>
             </div>
           </div>
