@@ -10,7 +10,7 @@ const Index = () => {
     <div className="min-h-screen bg-background relative">
       {/* Background watermark logo */}
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 0 }}>
-        <img src="/logo.png" alt="" className="w-[60vw] max-w-[800px] opacity-[0.04] select-none" draggable={false} />
+        <img src="/logo.png" alt="" className="w-[75vw] max-w-[1000px] opacity-[0.15] select-none" draggable={false} />
       </div>
       <Navbar />
       <main className="pt-16 relative z-10">
