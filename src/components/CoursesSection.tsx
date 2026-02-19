@@ -101,8 +101,8 @@ const CoursesSection = () => {
 </div>
 
 {/* 3. بوكس الشهادة (يظهر فقط إذا كان النص موجوداً) */}
-{course.certification && (
-  <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+              {course.certification && (
+                <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
                   <Award className="w-4 h-4 flex-shrink-0" />
                   <span className="font-medium">{course.certification}</span>
                 </div>
@@ -110,13 +110,15 @@ const CoursesSection = () => {
 
               {/* شرط ذكي: X-Ray يظهر مغلق، و CT يظهر السعر والزر */}
               {course.title.includes('X-Ray') ? (
+                /* حالة دورة الـ X-Ray */
                 <div className="flex items-center gap-2 text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2 mt-4">
                   <Users className="w-4 h-4" />
                   <span className="font-medium">التسجيل مغلق حالياً</span>
                 </div>
               ) : (
+                /* حالة دورة الـ CT (تظهر كاملة) */
                 <>
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-3 mb-6 mt-4">
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-2xl font-black text-primary">{course.price}</span>
                     </div>
@@ -124,6 +126,17 @@ const CoursesSection = () => {
                       <Users className="w-4 h-4" />
                       <span className="font-medium">المقاعد محدودة - التسجيل متاح</span>
                     </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleWhatsApp(course.whatsappMessage)}
+                    className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    سجل الآن عبر واتساب
+                  </button>
+                </>
+              )}
                   </div>
                   <button
                     onClick={() => handleWhatsApp(course.whatsappMessage)}
