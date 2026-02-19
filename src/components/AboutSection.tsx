@@ -72,7 +72,7 @@ const AboutSection = () => {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 blur-2xl" />
               <div className="relative w-full h-full rounded-2xl border-2 border-secondary/30 bg-card flex flex-col items-center justify-center gap-4 border-glow">
                 <GraduationCap className="w-20 h-20 text-primary" />
-                <span className="text-2xl font-black text-foreground">AOT of Radiology</span>
+                <p className="text-secondary font-bold mb-6 text-lg tracking-wide">AOT of Radiology</p>
                 
               </div>
             </div>
