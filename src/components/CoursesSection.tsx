@@ -25,7 +25,7 @@ const courses: Course[] = [
     registrationEnd: "19/2/2026",
     duration: "شهر واحد",
     
-    stats: "تم تقديمها 12 مرة لـ 200+ طالب",
+    stats: "تم تقديمها 13 مرة لـ 200+ طالب",
     certification: "شهادة معتمدة من المعهد الكندي",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة CT 1 الاحترافية",
   },
@@ -91,10 +91,12 @@ const CoursesSection = () => {
                 </div>
               )}
 
-              <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
-                <Award className="w-4 h-4 flex-shrink-0" />
-                <span className="font-medium">{course.certification}</span>
-              </div>
+              {course.certification && (
+                <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+                  <Award className="w-4 h-4 flex-shrink-0" />
+                  <span className="font-medium">{course.certification}</span>
+                </div>
+              )}
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-2 text-sm">
