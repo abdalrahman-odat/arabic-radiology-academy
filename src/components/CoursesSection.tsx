@@ -31,7 +31,7 @@ const courses: Course[] = [
   },
   {
     title: "دورة X-Ray الشاملة",
-    description: "إتقان 166 وضعية تصوير + شرح اناتومي العظام، التعرف على 140 مرض وكسر،تقييم جوده الصور لجميع الوضعيات.",
+    description: "إتقان 166 وضعية تصوير + شرح اناتومي العظام، التعرف على 140 مرض وكسر،تقييم جوده الصور لجميع الوضعيات",
     price: "$60",
     totalSeats: 40,
     startDate: "1/3/2026",
@@ -110,9 +110,9 @@ const CoursesSection = () => {
 <div className="space-y-3 mb-6">
   {/* 3. تم حذف سطر السعر بناءً على طلبك */}
   <div className="flex items-center gap-2 text-sm text-secondary">
-    <Users className="w-4 h-4" />
-    <span className="font-medium">بدأت بـ {course.totalSeats} مقعداً — بقي عدد محدود من المقاعد</span>
-  </div>
+  <Users className="w-4 h-4" />
+  <span className="font-medium">المقاعد محدوده - التسجيل متاح</span>
+</div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CalendarDays className="w-4 h-4" />
                   <span>تبدأ: {course.startDate} | المدة: {course.duration}</span>
