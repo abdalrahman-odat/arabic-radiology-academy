@@ -1,69 +1,58 @@
-import { useState } from "react"; // استيراد الحالة
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
 const testimonials = [
-  // التعليقات الـ 4 الأساسية (اللي بتظهر أول ما يفتح الموقع)
   {
     name: "غدير البطوش",
-
     content: "شُكرًا ع التعامل الراقي جِدًا ، وشُكرًا للكورس الفخم يلي كان لامم وشامل كُلشي بحتاجة اي فني أشعة بخصوص الCT بتستاهل كُل خير على المصداقية يلي كُنت اسمع فيها وتأكدت منها بس سجلت والحَمدُ لله مريح جِدًا من كل النواحي ، ان كان بتوصيل الافكار بطريقة جدًا رائعة ، ومريح بمراعاة الطلاب اثناء الكورس وبعد الكورس",
     rating: 5,
   },
   {
     name: "أحمد الشمري",
-
     content: "دورة ممتازة، الأستاذ عبدالله عودات شرح المادة بطريقة عملية وسهلة. أنصح بها كل فني أشعة.",
     rating: 5,
   },
   {
     name: "سارة العتيبي",
-
     content: "استفدت كثيراً من المحتوى الفني المستخلص من مراجع متعددة. المحتوى منظم بشكل احترافي.",
     rating: 5,
   },
   {
     name: "محمد القحطاني",
-
     content: "أفضل دورة حضرتها في مجال الأشعة المقطعية. الأستاذ عبدالله متمكن والمادة العلمية قوية جداً.",
     rating: 5,
   },
-  // الـ 4 تعليقات الجديدة (اللي بتظهر لما يضغط اقرأ المزيد)
   {
     name: "نورة الحربي",
-
     content: "أسلوب التدريس رائع، والشهادة الكندية المعتمدة أضافت قيمة كبيرة. شكراً للأستاذ عبدالله.",
     rating: 5,
   },
   {
     name: "أريام عادل",
-
     content: "أستاذ عبدالله من جد ما توفيك الكلمات حقك كورسات CT معك كان نقلة نوعية بالنسبة إلي درست المادة قبل بالجامعة وما كنت استوعب منها شي بس مع شرحك وطريقتك قدرت أفهم كل نقطة وكأني أول مرة أدرسها... أسلوبك جداً رهيب ويفتح النفس للمعلومة ممتنة إلك كثير والله.",
     rating: 5,
   },
   {
     name: "ضحى الكيلاني",
-
     content: "شكراً جداً عنجد من أفضل القرارات إني أخذت خطوة الاشتراك بهاذ الكورس، كثير فرق معي بالفهم والاستفادة وخاصة إنها بطريقة كثير سهلة وسلسة وبسيطة ف الحمدلله والله مبسوطة بهيك أشخاص تعرفنا عليهم ومش ندمانين بالمرة بالاشتراك وإن شاء الله أي دورة أو إشي بتعمله لقدام رح نكون أول المشتركين.",
     rating: 5,
   },
   {
     name: "ولاء الخليفات",
-
     content: "هي الفيدباك لأنه تستاهل جد والشرح ما شاء الله كثير بجنن ومفصل تفصيل ما نشرح مثله أكاديمي أبداً أشياء أول مرة أعرفها بتمنى إلك المزيد من التقدم إن شاء الله بكل إشي وأي حد متردد يشترك فيه يشترك ع ضمانتي لأنه جد رح تستفيدوا كثير وكثير رح تكونوا مبدعين إن شاء الله بتمنى إلك عبدالله كل الخير وإن شاء الله أي دورات بتعملها أنا رح أكون أولها بإذن الله.",
     rating: 5,
   }
 ];
 
 const TestimonialsSection = () => {
-  const [showAll, setShowAll] = useState(false); // الحالة للتحكم بالعرض
-
-  // تحديد التعليقات المعروضة (4 إذا كانت showAll خطأ، والكل إذا كانت صح)
+  const [showAll, setShowAll] = useState(false);
   const visibleTestimonials = showAll ? testimonials : testimonials.slice(0, 4);
 
   return (
     <section id="testimonials" className="py-20 bg-background/50">
-      <div className="container px-4">
+      <div className="container px-4 mx-auto">
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-primary text-glow-primary mb-4">
             آراء المتدربين
           </h2>
@@ -72,14 +61,14 @@ const TestimonialsSection = () => {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           <AnimatePresence mode="popLayout">
-            {visibleTestimonials.map((testimonial, i) => (
+            {visibleTestimonials.map((testimonial) => (
               <motion.div
                 key={testimonial.name}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="bg-card rounded-xl border border-border p-6 relative group"
+                className="bg-card rounded-xl border border-border p-6 relative group h-full flex flex-col"
               >
                 <Quote className="absolute top-4 left-4 w-8 h-8 text-primary/10 group-hover:text-primary/20 transition-colors" />
                 <div className="flex gap-1 mb-4">
@@ -87,17 +76,17 @@ const TestimonialsSection = () => {
                     <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="text-foreground leading-relaxed mb-6 italic">"{testimonial.content}"</p>
-                <div className="flex flex-col">
-                  <span className="font-bold text-lg">{testimonial.name}</span>
-                  <span className="text-secondary text-sm font-medium">— {testimonial.role}</span>
+                <p className="text-foreground leading-relaxed mb-6 italic flex-grow">"{testimonial.content}"</p>
+                <div className="flex flex-col mt-auto pt-4 border-t border-border/50">
+                  <span className="font-bold text-lg text-foreground border-r-2 border-primary pr-3">
+                    {testimonial.name}
+                  </span>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
 
-        {/* كبسة اقرأ المزيد */}
         <div className="text-center mt-12">
           <button
             onClick={() => setShowAll(!showAll)}
