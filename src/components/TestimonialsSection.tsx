@@ -42,7 +42,7 @@ const TestimonialsSection = () => {
             آراء المتدربين
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            ماذا يقول طلابنا عن تجربتهم مع أكاديمية دورات الأشعة
+            ماذا يقول طلابنا عن تجربتهم
           </p>
         </motion.div>
 
