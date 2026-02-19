@@ -20,21 +20,21 @@ const HeroSection = () => {
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 text-glow-primary">
-            <span className="text-primary">أكاديمية دورات الأشعة</span>
+            <span className="text-primary">AOT of Radiology</span>
             <br />
             <span className="text-foreground">طوّر مسيرتك المهنية في التصوير الطبي</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            دورات تدريبية احترافية ومعتمدة في CT و X-Ray
-            مع الأستاذ عبدالله عودات — ماجستير في تخصص الأشعة ومدرب سريري في المستشفى السعودي
+            دورات تدريبية احترافية في CT و X-Ray
+            مع الأستاذ عبدالله عودات — ماجستير في تخصص الأشعة ويعمل لدى مستشفى السعودي
           </p>
 
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
             {[
-              { icon: Users, label: "طالب ناجح", value: "+200" },
-              { icon: BookOpen, label: "دفعة ناجحة", value: "12" },
-              { icon: Award, label: "شهادة معتمدة", value: "كندية" },
+              { icon: Users, label: "طالب ناجح", value: "+300" },
+              { icon: BookOpen, label: "دفعة ناجحة", value: "17" },
+          
             ].map((stat, i) => (
               <motion.div
                 key={i}
