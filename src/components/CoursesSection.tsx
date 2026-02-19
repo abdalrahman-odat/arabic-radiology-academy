@@ -44,7 +44,7 @@ const courses: Course[] = [
   },
 ];
 
-const WHATSAPP_NUMBER = "962795418245";
+const WHATSAPP_NUMBER = "962708148303";
 
 const CoursesSection = () => {
   const handleWhatsApp = (message: string) => {
