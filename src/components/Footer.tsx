@@ -28,7 +28,7 @@ const Footer = () => {
             <div className="space-y-2 text-sm">
               <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="flex items-center gap-2 text-muted-foreground hover:text-secondary transition-colors">
                 <MessageCircle className="w-4 h-4" />
-                واتساب: 0795418245
+                واتساب: 0708148303
               </a>
             </div>
           </div>
