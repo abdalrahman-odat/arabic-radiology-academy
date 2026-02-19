@@ -73,7 +73,7 @@ const AboutSection = () => {
               <div className="relative w-full h-full rounded-2xl border-2 border-secondary/30 bg-card flex flex-col items-center justify-center gap-4 border-glow">
                 <GraduationCap className="w-20 h-20 text-primary" />
                 <span className="text-2xl font-black text-foreground">الأستاذ عبدالله عودات</span>
-                <span className="text-sm text-secondary font-medium">أكاديمية دورات الأشعة</span>
+                <span className="text-sm text-secondary font-medium">AOT of Radiology</span>
               </div>
             </div>
           </motion.div>
