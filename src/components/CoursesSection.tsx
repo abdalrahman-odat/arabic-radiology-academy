@@ -80,32 +80,40 @@ const CoursesSection = () => {
             >
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-primary via-primary to-secondary" />
 
-              <div className="text-5xl mb-4">{course.icon}</div>
-              <h3 className="text-xl font-bold text-foreground mb-2">{course.title}</h3>
-              <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{course.description}</p>
+<div className="text-5xl mb-4">{course.icon}</div>
+<h3 className="text-xl font-bold text-foreground mb-2">{course.title}</h3>
 
-              {course.stats && (
-                <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
-                  <BookOpen className="w-4 h-4 flex-shrink-0" />
-                  <span className="font-medium">{course.stats}</span>
-                </div>
-              )}
+{/* 1. نقلنا "تم تقديمها..." لتكون تحت العنوان مباشرة */}
+{course.stats && (
+  <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+    <BookOpen className="w-4 h-4 flex-shrink-0" />
+    <span className="font-medium">{course.stats}</span>
+  </div>
+)}
 
-              {course.certification && (
-                <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
-                  <Award className="w-4 h-4 flex-shrink-0" />
-                  <span className="font-medium">{course.certification}</span>
-                </div>
-              )}
+{/* 2. تقسيم الوصف لمربعات خضراء منفصلة (كل جملة ببوكس) */}
+<div className="space-y-2 mb-6">
+  {course.description.split('،').map((item, index) => (
+    <div key={index} className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-lg px-3 py-2 border border-secondary/10">
+      <div className="w-1.5 h-1.5 rounded-full bg-secondary" />
+      <span className="leading-relaxed">{item.trim()}</span>
+    </div>
+  ))}
+</div>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-2xl font-black text-primary">{course.price}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-secondary">
-                  <Users className="w-4 h-4" />
-                  <span className="font-medium">بدأت بـ {course.totalSeats} مقعداً — بقي عدد محدود من المقاعد</span>
-                </div>
+{course.certification && (
+  <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+    <Award className="w-4 h-4 flex-shrink-0" />
+    <span className="font-medium">{course.certification}</span>
+  </div>
+)}
+
+<div className="space-y-3 mb-6">
+  {/* 3. تم حذف سطر السعر بناءً على طلبك */}
+  <div className="flex items-center gap-2 text-sm text-secondary">
+    <Users className="w-4 h-4" />
+    <span className="font-medium">بدأت بـ {course.totalSeats} مقعداً — بقي عدد محدود من المقاعد</span>
+  </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CalendarDays className="w-4 h-4" />
                   <span>تبدأ: {course.startDate} | المدة: {course.duration}</span>
