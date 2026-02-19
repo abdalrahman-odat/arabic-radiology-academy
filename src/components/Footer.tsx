@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container px-4">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-black text-primary mb-3">أكاديمية دورات الأشعة</h3>
+            <h3 className="text-xl font-black text-primary mb-3">AOT of Radiology</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
               دورات تدريبية احترافية ومعتمدة في مجال الأشعة التشخيصية مع الأستاذ عبدالله عودات
             </p>
