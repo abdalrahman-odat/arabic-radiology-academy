@@ -32,7 +32,7 @@ const Navbar = () => {
             src={logoImg}
             alt="أكاديمية دورات الأشعة"
             className={`transition-all duration-300 ${
-              scrolled ? "h-9" : "h-12"
+              scrolled ? "h-16" : "h-24"
             }`}
           />
         </a>
