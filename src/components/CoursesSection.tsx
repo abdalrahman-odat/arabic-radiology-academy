@@ -24,7 +24,7 @@ const courses: Course[] = [
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
     duration: "شهرين",
-    icon: "☢️", // أضفنا الأيقونة هنا
+    icon: "", // تم حذف أيقونة الإشعاع
     stats: "تم تقديمها 13 مرة لـ 200+ طالب",
     certification: "شهادة معتمدة من المعهد الكندي",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة CT 1 الاحترافية",
@@ -37,7 +37,7 @@ const courses: Course[] = [
     startDate: "1/3/2026",
     registrationEnd: "19/2/2026",
     duration: "شهرين",
-    icon: "🦴", // أضفنا الأيقونة هنا
+    icon: "", // تم حذف أيقونة العظمة
     certification: "",
     stats: "تم تقديمها 4 مرات لـ 80+ طالب",
     whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
@@ -81,8 +81,8 @@ const CoursesSection = () => {
             >
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-primary via-primary to-secondary" />
 
-              <div className="text-5xl mb-4">{course.icon}</div>
-              <h3 className="text-xl font-bold text-foreground mb-2">{course.title}</h3>
+              {/* تم حذف سطر عرض الأيقونة icon تماماً من هنا */}
+              <h3 className="text-xl font-bold text-foreground mb-4 mt-2">{course.title}</h3>
 
               {/* 1. بوكس Stats برتقالي */}
               {course.stats && (
@@ -119,9 +119,7 @@ const CoursesSection = () => {
               ) : (
                 <>
                   <div className="space-y-3 mb-6 mt-4">
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="text-2xl font-black text-primary">{course.price}</span>
-                    </div>
+                    {/* تم حذف سطر السعر price من هنا بناءً على طلبك ليبقى بوكس CT نظيفاً */}
                     <div className="flex items-center gap-2 text-sm text-secondary">
                       <Users className="w-4 h-4" />
                       <span className="font-medium">المقاعد محدودة - التسجيل متاح</span>
