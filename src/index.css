@@ -62,4 +62,15 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 30px hsl(16 100% 50% / 0.2);
   }
+
+  /* إخفاء علامة Lovable البرمجية بشكل نهائي */
+  #lovable-badge, 
+  .lovable-badge, 
+  [data-lovable-badge],
+  .fixed.bottom-4.right-4.flex.items-center.gap-2 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 }
