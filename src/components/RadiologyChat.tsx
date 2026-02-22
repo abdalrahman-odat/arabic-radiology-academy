@@ -37,7 +37,7 @@ function findAnswer(question: string): string {
     return `مرحباً بك في ${radiologyKB.academy_info.name}! نحن متخصصون في تدريب فنيي الأشعة.`;
   }
 
-  return `عذراً، لا أملك إجابة على هذا السؤال حالياً. 😊\nتواصل مع الأستاذ عبدالله مباشرة عبر واتساب:\nhttps://wa.me/${WHATSAPP_NUMBER}`;
+  return `عذراً، لا أملك إجابة على هذا السؤال حالياً. 😊\nتواصل مع الأستاذ عبدالله مباشرة عبر واتساب:\n${WHATSAPP_NUMBER}`;
 }
 
 const RadiologyChat = () => {
