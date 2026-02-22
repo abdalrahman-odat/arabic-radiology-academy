@@ -111,30 +111,33 @@ const CoursesSection = () => {
               )}
 
               {/* 4. الشرط الذكي للفصل بين الحالات */}
-              {course.title.includes('X-Ray') ? (
-                <div className="flex items-center gap-2 text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2 mt-4">
-                  <Users className="w-4 h-4" />
-                  <span className="font-medium">التسجيل مغلق حالياً</span>
-                </div>
-              ) : (
-                <>
-                  <div className="space-y-3 mb-6 mt-4">
-                    {/* تم حذف سطر السعر price من هنا بناءً على طلبك ليبقى بوكس CT نظيفاً */}
-                    <div className="flex items-center gap-2 text-sm text-secondary">
+              <div className="space-y-3 mb-6 mt-4">
+                {course.title.includes('X-Ray') ? (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-sm text-green-500">
                       <Users className="w-4 h-4" />
-                      <span className="font-medium">المقاعد محدودة - يبدأ التسجيل بتاريخ: 24/3</span>
+                      <span className="font-medium">المقاعد محدوده - التسجيل متاح</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-green-500">
+                      <CalendarDays className="w-4 h-4" />
+                      <span className="font-medium">يبدأ الكورس بتاريخ 3/3</span>
                     </div>
                   </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-secondary">
+                    <Users className="w-4 h-4" />
+                    <span className="font-medium">المقاعد محدودة - يبدأ التسجيل بتاريخ: 24/3</span>
+                  </div>
+                )}
+              </div>
 
-                  <button
-                    onClick={() => handleWhatsApp(course.whatsappMessage)}
-                    className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    سجل الآن عبر واتساب
-                  </button>
-                </>
-              )}
+              <button
+                onClick={() => handleWhatsApp(course.whatsappMessage)}
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
+              >
+                <MessageCircle className="w-5 h-5" />
+                سجل الآن عبر واتساب
+              </button>
             </motion.div>
           ))}
         </div>
