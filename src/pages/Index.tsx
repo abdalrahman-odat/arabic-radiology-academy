@@ -4,6 +4,7 @@ import CoursesSection from "@/components/CoursesSection";
 import AboutSection from "@/components/AboutSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
+import RadiologyChat from "@/components/RadiologyChat";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
         <TestimonialsSection />
         <Footer />
       </main>
+      <RadiologyChat />
     </div>
   );
 };
