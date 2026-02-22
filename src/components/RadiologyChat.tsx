@@ -43,7 +43,7 @@ function findAnswer(question: string): string {
 const RadiologyChat = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", text: `أهلاً بك في ${radiologyKB.academy_info.name}! 👋\nكيف أقدر أساعدك؟` },
+    { role: "bot", text: "أهلاً بك في AOT of Radiology\nكيف بقدر أساعدك اليوم؟" },
   ]);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
