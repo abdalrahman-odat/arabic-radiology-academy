@@ -126,8 +126,12 @@ const CoursesSection = () => {
                 ) : (
                   <div className="flex items-center gap-2 text-sm text-secondary">
                     <Users className="w-4 h-4" />
-                    <span className="font-medium">المقاعد محدودة - يبدأ التسجيل بتاريخ: 24/3</span>
+                    <span className="font-medium">المقاعد محدوده - التسجيل متاح</span>
                   </div>
+              <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
+    <Calendar className="w-4 h-4" />
+    <span>يبدأ الكورس بتاريخ 3/3</span>
+  </div>
                 )}
               </div>
 
