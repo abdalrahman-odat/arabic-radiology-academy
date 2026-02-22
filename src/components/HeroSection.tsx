@@ -31,7 +31,7 @@ const HeroSection = () => {
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto md:mx-0 mb-10 leading-relaxed">
               دورات تدريبية احترافية في CT و X-Ray
-              مع الأستاذ عبدالله عودات — ماجستير في تخصص الأشعة ومدرب سريري في المستشفى السعودي
+              مع الأستاذ عبدالله عودات — ماجستير في تخصص الأشعة ومدرب سريري في مستشفى السعودي
             </p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-8 md:gap-12">
