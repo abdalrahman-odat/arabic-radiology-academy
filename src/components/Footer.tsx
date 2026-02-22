@@ -36,7 +36,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border mt-8 pt-6 text-center text-xs text-muted-foreground">
-          جميع الحقوق محفوظة © {new Date().getFullYear()} — أكاديمية دورات الأشعة | الأستاذ عبدالله عودات
+          جميع الحقوق محفوظة © {new Date().getFullYear()} — AOT of Radiology | الأستاذ عبدالله عودات
         </div>
       </div>
     </footer>
