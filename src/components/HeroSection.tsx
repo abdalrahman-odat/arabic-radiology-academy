@@ -20,7 +20,7 @@ const HeroSection = () => {
           >
             <div className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/10 px-4 py-2 mb-8">
               <Award className="w-4 h-4 text-secondary" />
-              <span className="text-sm text-secondary font-medium">شهادات معتمدة من المعهد الكندي</span>
+              <span className="text-sm text-secondary font-medium"> الموقع الرسمي الاول المخصص للاشعة</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 text-glow-primary">
