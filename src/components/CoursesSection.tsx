@@ -122,7 +122,7 @@ const CoursesSection = () => {
                     {/* تم حذف سطر السعر price من هنا بناءً على طلبك ليبقى بوكس CT نظيفاً */}
                     <div className="flex items-center gap-2 text-sm text-secondary">
                       <Users className="w-4 h-4" />
-                      <span className="font-medium">المقاعد محدودة - التسجيل متاح</span>
+                      <span className="font-medium">المقاعد محدودة - يبدأ التسجيل بتاريخ: 24/3</span>
                     </div>
                   </div>
 
