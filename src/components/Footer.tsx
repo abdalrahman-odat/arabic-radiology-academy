@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 
-const WHATSAPP_NUMBER = "962795418245";
+const WHATSAPP_NUMBER = "962795130027";
 
 const Footer = () => {
   return (
