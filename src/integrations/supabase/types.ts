@@ -19,6 +19,7 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          is_approved: boolean
           name: string
           rating: number
         }
@@ -26,6 +27,7 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          is_approved?: boolean
           name: string
           rating?: number
         }
@@ -33,6 +35,7 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          is_approved?: boolean
           name?: string
           rating?: number
         }

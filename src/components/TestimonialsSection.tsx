@@ -74,6 +74,7 @@ const TestimonialsSection = () => {
       const { data } = await supabase
         .from("testimonials")
         .select("*")
+        .eq("is_approved", true)
         .order("created_at", { ascending: false });
       if (data) setDbTestimonials(data);
     };
@@ -85,7 +86,10 @@ const TestimonialsSection = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "testimonials" },
         (payload) => {
-          setDbTestimonials((prev) => [payload.new as Testimonial, ...prev]);
+          const newItem = payload.new as Testimonial & { is_approved?: boolean };
+          if (newItem.is_approved) {
+            setDbTestimonials((prev) => [newItem, ...prev]);
+          }
         }
       )
       .subscribe();
@@ -221,7 +225,7 @@ const TestimonialsSection = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-secondary text-center font-medium"
                 >
-                  ✓ شكراً لك! تم إضافة تعليقك بنجاح
+                  ✓ شكراً لك! تم إرسال تعليقك وسيظهر بعد المراجعة
                 </motion.p>
               )}
             </form>
