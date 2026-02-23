@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import radiologyKB from "@/data/radiology_kb.json";
 
-const WHATSAPP_NUMBER = "962795418245";
+const WHATSAPP_NUMBER = "‪962795130027";‬
 
 interface Message {
   role: "user" | "bot";
