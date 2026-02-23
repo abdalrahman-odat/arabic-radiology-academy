@@ -5,7 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import RadiologyChat from "./components/RadiologyChat"; // السطر الجديد للاستيراد
+import AdminComments from "./pages/AdminComments";
+import RadiologyChat from "./components/RadiologyChat";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/admin-comments" element={<AdminComments />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

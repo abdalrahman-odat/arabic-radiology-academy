@@ -31,8 +31,10 @@ const RadiologyChat = () => {
     if (q.includes("مرحبا") || q.includes("اهلا") || q.includes("كيفك")) {
       return "الحمد لله، أنا بخير وأعمل لمساعدتكم. ما هي تساؤلاتكم حول الأشعة اليوم؟";
     }
-    if (q.includes("ct") || q.includes("مقطعي")) return radiologyKB.courses_details?.CT_Course || "معلومات دورة الـ CT متوفرة لدى الأستاذ عبدالله.";
-    if (q.includes("xray") || q.includes("سيني")) return radiologyKB.courses_details?.XRay_Course || "معلومات دورة الـ X-Ray متوفرة لدى الأستاذ عبدالله.";
+    const ctCourse = radiologyKB.courses?.find(c => c.id === "ct");
+    const xrayCourse = radiologyKB.courses?.find(c => c.id === "xray");
+    if (q.includes("ct") || q.includes("مقطعي")) return ctCourse ? `${ctCourse.name}: ${ctCourse.details} - السعر: ${ctCourse.price}` : "معلومات دورة الـ CT متوفرة لدى الأستاذ عبدالله.";
+    if (q.includes("xray") || q.includes("سيني")) return xrayCourse ? `${xrayCourse.name}: ${xrayCourse.details} - السعر: ${xrayCourse.price}` : "معلومات دورة الـ X-Ray متوفرة لدى الأستاذ عبدالله.";
     
     return `نعتذر، هذه المعلومة غير متوفرة حالياً. يرجى التواصل مع الأستاذ عبدالله:\n${WHATSAPP_NUMBER}`;
   };
