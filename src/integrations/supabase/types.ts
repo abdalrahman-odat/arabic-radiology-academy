@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      courses: {
+        Row: {
+          certification: string | null
+          created_at: string
+          description: string
+          duration: string
+          id: string
+          is_active: boolean
+          price: string
+          sort_order: number
+          start_date: string
+          stats: string | null
+          title: string
+          total_seats: number
+          updated_at: string
+          whatsapp_message: string
+        }
+        Insert: {
+          certification?: string | null
+          created_at?: string
+          description: string
+          duration?: string
+          id?: string
+          is_active?: boolean
+          price: string
+          sort_order?: number
+          start_date?: string
+          stats?: string | null
+          title: string
+          total_seats?: number
+          updated_at?: string
+          whatsapp_message?: string
+        }
+        Update: {
+          certification?: string | null
+          created_at?: string
+          description?: string
+          duration?: string
+          id?: string
+          is_active?: boolean
+          price?: string
+          sort_order?: number
+          start_date?: string
+          stats?: string | null
+          title?: string
+          total_seats?: number
+          updated_at?: string
+          whatsapp_message?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           content: string
