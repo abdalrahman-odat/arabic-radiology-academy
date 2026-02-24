@@ -1,56 +1,18 @@
 import { motion } from "framer-motion";
 import { Clock, Users, CalendarDays, MessageCircle, Award, BookOpen } from "lucide-react";
-
-interface Course {
-  title: string;
-  description: string;
-  price: string;
-  totalSeats: number;
-  startDate: string;
-  registrationEnd: string;
-  duration: string;
-  icon: string;
-  stats?: string;
-  certification: string;
-  whatsappMessage: string;
-}
-
-const courses: Course[] = [
-  {
-    title: "دورة CT 1 الاحترافية",
-    description: "تعلم بناء بروتوكولات التصوير، فهم فيزياء جهاز الـ CT بعمق، التعرف على اكثر من 40 مرض",
-    price: "$80",
-    totalSeats: 40,
-    startDate: "1/3/2026",
-    registrationEnd: "19/2/2026",
-    duration: "شهرين",
-    icon: "", // تم حذف أيقونة الإشعاع
-    stats: "تم تقديمها 13 مرة لـ 200+ طالب",
-    certification: "شهادة معتمدة من المعهد الكندي",
-    whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة CT 1 الاحترافية",
-  },
-  {
-    title: "دورة X-Ray الشاملة",
-    description: "إتقان 166 وضعية تصوير + شرح اناتومي العظام، التعرف على 140 مرض وكسر، تقييم جوده الصور لجميع الوضعيات",
-    price: "$60",
-    totalSeats: 40,
-    startDate: "1/3/2026",
-    registrationEnd: "19/2/2026",
-    duration: "شهرين",
-    icon: "", // تم حذف أيقونة العظمة
-    certification: "",
-    stats: "تم تقديمها 4 مرات لـ 80+ طالب",
-    whatsappMessage: "مرحباً، أرغب بالتسجيل في دورة X-Ray الشاملة",
-  },
-];
-
-const WHATSAPP_NUMBER = "962795130027";
+import { useCourses, useSiteSettings } from "@/hooks/useSiteData";
 
 const CoursesSection = () => {
+  const { courses, loading } = useCourses();
+  const { settings } = useSiteSettings();
+  const whatsappNumber = settings.whatsapp_number || "962795130027";
+
   const handleWhatsApp = (message: string) => {
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, "_blank");
+    window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, "_blank");
   };
+
+  const activeCourses = courses.filter(c => c.is_active);
 
   return (
     <section id="courses" className="py-20 md:py-28">
@@ -69,84 +31,70 @@ const CoursesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {courses.map((course, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-card rounded-xl border border-border p-6 card-hover relative overflow-hidden group"
-            >
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-primary via-primary to-secondary" />
-
-              {/* تم حذف سطر عرض الأيقونة icon تماماً من هنا */}
-              <h3 className="text-xl font-bold text-foreground mb-4 mt-2">{course.title}</h3>
-
-              {/* 1. بوكس Stats برتقالي */}
-              {course.stats && (
-                <div className="flex items-center gap-2 text-sm text-primary mb-4 bg-primary/10 rounded-lg px-3 py-2">
-                  <BookOpen className="w-4 h-4 flex-shrink-0" />
-                  <span className="font-medium">{course.stats}</span>
-                </div>
-              )}
-
-              {/* 2. مربعات الوصف الخضراء */}
-              <div className="space-y-2 mb-6">
-                {course.description.split('،').map((item, index) => (
-                  <div key={index} className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-lg px-3 py-2 border border-secondary/10">
-                    <div className="w-1.5 h-1.5 rounded-full bg-secondary" />
-                    <span className="leading-relaxed">{item.trim()}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* 3. بوكس الشهادة */}
-              {course.certification && (
-                <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
-                  <Award className="w-4 h-4 flex-shrink-0" />
-                  <span className="font-medium">{course.certification}</span>
-                </div>
-              )}
-
-              {/* 4. الشرط الذكي للفصل بين الحالات */}
-              <div className="space-y-3 mb-6 mt-4">
-                {course.title.includes('X-Ray') ? (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm text-green-500">
-                      <Users className="w-4 h-4" />
-                      <span className="font-medium">المقاعد محدوده - التسجيل متاح</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-green-500">
-                      <CalendarDays className="w-4 h-4" />
-                      <span className="font-medium">يبدأ الكورس بتاريخ 3/3</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-2 mb-6">
-  <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
-    <Users className="w-4 h-4" />
-    <span>المقاعد محدودة - التسجيل متاح</span>
-  </div>
-  <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
-    <CalendarDays className="w-4 h-4" />
-    <span>يبدأ الكورس بتاريخ: 24/3</span>
-  </div>
-</div>
-                )}
-              </div>
-
-              <button
-                onClick={() => handleWhatsApp(course.whatsappMessage)}
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
+        {loading ? (
+          <p className="text-center text-muted-foreground">جارٍ التحميل...</p>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {activeCourses.map((course, i) => (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+                className="bg-card rounded-xl border border-border p-6 card-hover relative overflow-hidden group"
               >
-                <MessageCircle className="w-5 h-5" />
-                سجل الآن عبر واتساب
-              </button>
-            </motion.div>
-          ))}
-        </div>
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-primary via-primary to-secondary" />
+
+                <h3 className="text-xl font-bold text-foreground mb-4 mt-2">{course.title}</h3>
+
+                {course.stats && (
+                  <div className="flex items-center gap-2 text-sm text-primary mb-4 bg-primary/10 rounded-lg px-3 py-2">
+                    <BookOpen className="w-4 h-4 flex-shrink-0" />
+                    <span className="font-medium">{course.stats}</span>
+                  </div>
+                )}
+
+                <div className="space-y-2 mb-6">
+                  {course.description.split('،').map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-lg px-3 py-2 border border-secondary/10">
+                      <div className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                      <span className="leading-relaxed">{item.trim()}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {course.certification && (
+                  <div className="flex items-center gap-2 text-sm text-secondary mb-4 bg-secondary/10 rounded-lg px-3 py-2">
+                    <Award className="w-4 h-4 flex-shrink-0" />
+                    <span className="font-medium">{course.certification}</span>
+                  </div>
+                )}
+
+                <div className="space-y-1 mb-6 mt-4">
+                  <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
+                    <Users className="w-4 h-4" />
+                    <span>المقاعد محدودة - التسجيل متاح</span>
+                  </div>
+                  {course.start_date && (
+                    <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
+                      <CalendarDays className="w-4 h-4" />
+                      <span>يبدأ الكورس بتاريخ: {course.start_date}</span>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => handleWhatsApp(course.whatsapp_message)}
+                  className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  سجل الآن عبر واتساب
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
