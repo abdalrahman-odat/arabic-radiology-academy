@@ -85,7 +85,13 @@ const CoursesSection = () => {
                 </div>
 
                 <button
-                  onClick={() => handleWhatsApp(course.whatsapp_message)}
+                  onClick={() => {
+  // كود يدوي لإرسال الرسالة الصحيحة لكل دورة
+  const msg = course.title.includes("CT") 
+    ? "مرحبا مهتم بكورس CT ممكن تبعثلي التفاصيل" 
+    : "مرحبا مهتم بكورس X Ray ممكن تبعثلي التفاصيل";
+  handleWhatsApp(msg);
+}}
                   className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
                 >
                   <MessageCircle className="w-5 h-5" />
