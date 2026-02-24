@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Hospital, Award, Users } from "lucide-react";
+import { useSiteSettings } from "@/hooks/useSiteData";
 
 const AboutSection = () => {
+  const { settings } = useSiteSettings();
+
   return (
     <section id="about" className="py-20 md:py-28 bg-muted/30">
       <div className="container px-4">
@@ -15,11 +18,11 @@ const AboutSection = () => {
             <h2 className="text-3xl md:text-5xl font-black text-primary text-glow-primary mb-6">
               عن المدرب
             </h2>
-            <h3 className="text-2xl font-bold text-foreground mb-4">الأستاذ عبدالله عودات</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-4">
+              {settings.instructor_name || "الأستاذ عبدالله عودات"}
+            </h3>
             <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-              مدرب متخصص في مجال الأشعة التشخيصية، يمتلك خبرة واسعة في التعليم الأكاديمي
-              والتدريب السريري. قام بتدريب أكثر من 300 طالب على مدار 17 دفعة ناجحة، ويسعى
-              دائماً لنقل المعرفة العملية والنظرية لفنيي الأشعة بأسلوب مبسّط وعملي.
+              {settings.instructor_bio || "مدرب متخصص في مجال الأشعة التشخيصية، يمتلك خبرة واسعة في التعليم الأكاديمي والتدريب السريري."}
             </p>
 
             <div className="space-y-4">
@@ -36,12 +39,12 @@ const AboutSection = () => {
                 },
                 {
                   icon: Users,
-                  title: "أكثر من 300 طالب في 17 دفعة",
+                  title: `أكثر من ${settings.total_students || "300"} طالب في ${settings.total_batches || "17"} دفعة`,
                   desc: "سجل حافل في تأهيل فنيي الأشعة المحترفين",
                 },
                 {
                   icon: Award,
-                  title: "مدرب معتمد من المعهد الكندي ",
+                  title: "مدرب معتمد من المعهد الكندي",
                   desc: "",
                 },
               ].map((item, i) => (
@@ -73,9 +76,8 @@ const AboutSection = () => {
               <div className="relative w-full h-full rounded-2xl border-2 border-secondary/30 bg-card flex flex-col items-center justify-center gap-4 border-glow">
                 <GraduationCap className="w-20 h-20 text-primary" />
                 <p className="text-secondary font-black mb-6 text-2xl md:text-3xl tracking-wider">
-  AOT of Radiology
-</p>
-                
+                  {settings.academy_name || "AOT of Radiology"}
+                </p>
               </div>
             </div>
           </motion.div>
