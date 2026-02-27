@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       courses: {
         Row: {
+          button_text: string
           certification: string | null
           created_at: string
           description: string
@@ -23,6 +24,7 @@ export type Database = {
           id: string
           is_active: boolean
           price: string
+          registration_status: string
           sort_order: number
           start_date: string
           stats: string | null
@@ -32,6 +34,7 @@ export type Database = {
           whatsapp_message: string
         }
         Insert: {
+          button_text?: string
           certification?: string | null
           created_at?: string
           description: string
@@ -39,6 +42,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           price: string
+          registration_status?: string
           sort_order?: number
           start_date?: string
           stats?: string | null
@@ -48,6 +52,7 @@ export type Database = {
           whatsapp_message?: string
         }
         Update: {
+          button_text?: string
           certification?: string | null
           created_at?: string
           description?: string
@@ -55,6 +60,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           price?: string
+          registration_status?: string
           sort_order?: number
           start_date?: string
           stats?: string | null

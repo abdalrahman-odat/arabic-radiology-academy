@@ -19,6 +19,8 @@ interface Course {
   whatsapp_message: string;
   is_active: boolean;
   sort_order: number;
+  button_text: string;
+  registration_status: string;
 }
 
 interface Setting {
@@ -286,6 +288,25 @@ const AdminDashboard = () => {
                   <label className="text-xs text-muted-foreground mb-1 block">الشهادة</label>
                   <input value={course.certification || ""} onChange={(e) => updateCourse(course.id, "certification", e.target.value)}
                     className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">نص زر التسجيل</label>
+                    <input value={course.button_text || ""} onChange={(e) => updateCourse(course.id, "button_text", e.target.value)}
+                      className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">حالة التسجيل</label>
+                    <select
+                      value={course.registration_status || "open"}
+                      onChange={(e) => updateCourse(course.id, "registration_status", e.target.value)}
+                      className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    >
+                      <option value="open">مفتوح</option>
+                      <option value="closed">مغلق</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div className="flex gap-2">

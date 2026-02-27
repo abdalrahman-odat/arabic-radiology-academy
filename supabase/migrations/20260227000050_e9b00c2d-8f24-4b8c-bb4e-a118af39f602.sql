@@ -1,0 +1,2 @@
+ALTER TABLE public.courses ADD COLUMN IF NOT EXISTS button_text text NOT NULL DEFAULT 'سجل الآن عبر واتساب';
+ALTER TABLE public.courses ADD COLUMN IF NOT EXISTS registration_status text NOT NULL DEFAULT 'open';
