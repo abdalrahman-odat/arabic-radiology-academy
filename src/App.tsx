@@ -19,13 +19,18 @@ const ChestToast = () => {
       toast(
         <div
           className="flex items-center gap-3 cursor-pointer w-full"
-          onClick={() => {
+          onClick={async () => {
+            const response = await fetch("/chestAOT.pdf");
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
             const a = document.createElement("a");
-            a.href = "/chestAOT.pdf";
+            a.href = objectUrl;
             a.download = "chestAOT.pdf";
+            a.style.display = "none";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            URL.revokeObjectURL(objectUrl);
           }}
         >
           <Activity className="w-5 h-5 flex-shrink-0 text-cyan-400 animate-pulse" />
