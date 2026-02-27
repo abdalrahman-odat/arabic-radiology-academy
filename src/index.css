@@ -63,6 +63,28 @@
     box-shadow: 0 8px 30px hsl(16 100% 50% / 0.2);
   }
 
+  /* X-ray themed toast */
+  .xray-toast {
+    background: rgba(10, 15, 30, 0.85) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 220, 255, 0.4) !important;
+    box-shadow: 0 0 12px rgba(0, 220, 255, 0.25), 0 0 30px rgba(0, 220, 255, 0.1), inset 0 0 12px rgba(0, 220, 255, 0.05) !important;
+    animation: xray-pulse 2.5s ease-in-out infinite !important;
+    border-radius: 12px !important;
+  }
+
+  @keyframes xray-pulse {
+    0%, 100% {
+      border-color: rgba(0, 220, 255, 0.4);
+      box-shadow: 0 0 12px rgba(0, 220, 255, 0.25), 0 0 30px rgba(0, 220, 255, 0.1);
+    }
+    50% {
+      border-color: rgba(0, 220, 255, 0.7);
+      box-shadow: 0 0 18px rgba(0, 220, 255, 0.4), 0 0 40px rgba(0, 220, 255, 0.2);
+    }
+  }
+
   /* إخفاء علامة Lovable البرمجية بشكل نهائي */
   #lovable-badge, 
   .lovable-badge, 

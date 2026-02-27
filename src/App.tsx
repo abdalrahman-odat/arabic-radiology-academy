@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { toast } from "sonner";
-import { Download } from "lucide-react";
+import { Download, Activity } from "lucide-react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -23,13 +23,19 @@ const ChestToast = () => {
             const a = document.createElement("a");
             a.href = "/chestAOT.pdf";
             a.download = "chestAOT.pdf";
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
           }}
         >
-          <Download className="w-5 h-5 flex-shrink-0" />
-          <span>ملف chest xray اضغط للتحميل</span>
+          <Activity className="w-5 h-5 flex-shrink-0 text-cyan-400 animate-pulse" />
+          <span className="text-cyan-50 font-medium">ملف chest xray اضغط للتحميل</span>
+          <Download className="w-4 h-4 flex-shrink-0 text-cyan-300 mr-auto" />
         </div>,
-        { duration: 8000 }
+        {
+          duration: 8000,
+          className: "xray-toast",
+        }
       );
     }, 3000);
     return () => clearTimeout(timer);
