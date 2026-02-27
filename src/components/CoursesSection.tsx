@@ -35,7 +35,11 @@ const CoursesSection = () => {
           <p className="text-center text-muted-foreground">جارٍ التحميل...</p>
         ) : (
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {activeCourses.map((course, i) => (
+            {activeCourses.map((course, i) => {
+              const isOpen = (course as any).registration_status !== "closed";
+              const buttonText = (course as any).button_text || "سجل الآن عبر واتساب";
+
+              return (
               <motion.div
                 key={course.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -71,34 +75,37 @@ const CoursesSection = () => {
                   </div>
                 )}
 
-                <div className="space-y-1 mb-6 mt-4">
-                  <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
-                    <Users className="w-4 h-4" />
-                    <span>المقاعد محدودة - التسجيل متاح</span>
-                  </div>
-                  {course.start_date && (
-                    <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
-                      <CalendarDays className="w-4 h-4" />
-                      <span>يبدأ الكورس بتاريخ: {course.start_date}</span>
+                {isOpen ? (
+                  <>
+                    <div className="space-y-1 mb-6 mt-4">
+                      <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
+                        <Users className="w-4 h-4" />
+                        <span>المقاعد محدودة - التسجيل متاح</span>
+                      </div>
+                      {course.start_date && (
+                        <div className="flex items-center gap-2 text-sm text-green-500 font-medium">
+                          <CalendarDays className="w-4 h-4" />
+                          <span>يبدأ الكورس بتاريخ: {course.start_date}</span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <button
-                  onClick={() => {
-  // كود يدوي لإرسال الرسالة الصحيحة لكل دورة
-  const msg = course.title.includes("CT") 
-    ? "مرحبا مهتم بكورس CT ممكن تبعثلي التفاصيل" 
-    : "مرحبا مهتم بكورس X Ray ممكن تبعثلي التفاصيل";
-  handleWhatsApp(msg);
-}}
-                  className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  للتفاصيل والتسجيل عبر الواتساب
-                </button>
+                    <button
+                      onClick={() => handleWhatsApp(course.whatsapp_message)}
+                      className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      {buttonText}
+                    </button>
+                  </>
+                ) : (
+                  <div className="mt-6 text-center">
+                    <p className="text-destructive font-bold text-lg">الكورس مغلق حالياً</p>
+                  </div>
+                )}
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
