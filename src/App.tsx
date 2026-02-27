@@ -15,22 +15,35 @@ const queryClient = new QueryClient();
 
 const ChestToast = () => {
   useEffect(() => {
+    // Pre-fetch the PDF as a blob so download is instant on click
+    let cachedUrl: string | null = null;
+    fetch("/chestAOT.pdf")
+      .then((res) => res.blob())
+      .then((blob) => {
+        cachedUrl = URL.createObjectURL(blob);
+      })
+      .catch(() => {});
+
     const timer = setTimeout(() => {
       toast(
         <div
           className="flex items-center gap-3 cursor-pointer w-full"
           onClick={async () => {
-            const response = await fetch("/chestAOT.pdf");
-            const blob = await response.blob();
-            const objectUrl = URL.createObjectURL(blob);
+            let url = cachedUrl;
+            if (!url) {
+              const res = await fetch("/chestAOT.pdf");
+              const blob = await res.blob();
+              url = URL.createObjectURL(blob);
+            }
             const a = document.createElement("a");
-            a.href = objectUrl;
+            a.href = url;
             a.download = "chestAOT.pdf";
             a.style.display = "none";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(objectUrl);
+            // Don't revoke cached URL immediately on iOS — slight delay helps
+            setTimeout(() => URL.revokeObjectURL(url!), 3000);
           }}
         >
           <Activity className="w-5 h-5 flex-shrink-0 text-cyan-400 animate-pulse" />
