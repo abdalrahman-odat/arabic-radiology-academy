@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Clock, Users, CalendarDays, MessageCircle, Award, BookOpen } from "lucide-react";
 import { useCourses, useSiteSettings } from "@/hooks/useSiteData";
+import { trackClick } from "@/lib/trackClick";
 
 const CoursesSection = () => {
   const { courses, loading } = useCourses();
