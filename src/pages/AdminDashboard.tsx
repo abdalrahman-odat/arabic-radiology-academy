@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowRight, Save, Plus, Trash2, Check } from "lucide-react";
+import { Lock, ArrowRight, Save, Plus, Trash2, Check, BarChart3, Users, BookOpen, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
