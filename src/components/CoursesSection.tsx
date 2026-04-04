@@ -8,7 +8,8 @@ const CoursesSection = () => {
   const { settings } = useSiteSettings();
   const whatsappNumber = settings.whatsapp_number || "962795130027";
 
-  const handleWhatsApp = (message: string) => {
+  const handleWhatsApp = (message: string, courseTitle: string) => {
+    trackClick(`Join Course: ${courseTitle}`, "cta");
     const encoded = encodeURIComponent(message);
     window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, "_blank");
   };
