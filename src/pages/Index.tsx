@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import CoursesSection from "@/components/CoursesSection";
@@ -5,8 +6,12 @@ import AboutSection from "@/components/AboutSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 import RadiologyChat from "@/components/RadiologyChat";
+import { trackPageVisit } from "@/lib/trackClick";
 
 const Index = () => {
+  useEffect(() => {
+    trackPageVisit("/");
+  }, []);
   return (
     <div className="min-h-screen bg-background relative">
       {/* Background watermark logo */}
