@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowRight, Save, Plus, Trash2, Check, BarChart3, Users, BookOpen, MessageCircle } from "lucide-react";
+import { Lock, ArrowRight, Save, Plus, Trash2, Check, BarChart3, Users, BookOpen, MessageCircle, Globe, MousePointerClick, Eye, Clock, FileDown, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const ADMIN_PASSWORD = "aot2025admin";
 
@@ -38,6 +39,23 @@ interface Testimonial {
   created_at: string;
 }
 
+interface ClickData {
+  link_name: string;
+  link_category: string;
+  created_at: string;
+}
+
+interface VisitData {
+  page_path: string;
+  referrer: string | null;
+  session_id: string | null;
+  created_at: string;
+}
+
+const REFERRER_COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "#06b6d4", "#8b5cf6", "#f59e0b"];
+
+const glassCard = "backdrop-blur-md bg-card/60 border border-border/40 rounded-xl shadow-lg shadow-primary/5";
+
 const AdminDashboard = () => {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
@@ -46,6 +64,8 @@ const AdminDashboard = () => {
   const [settings, setSettings] = useState<Setting[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [comments, setComments] = useState<Testimonial[]>([]);
+  const [clicks, setClicks] = useState<ClickData[]>([]);
+  const [visits, setVisits] = useState<VisitData[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -61,14 +81,18 @@ const AdminDashboard = () => {
 
   const fetchAll = async () => {
     setLoading(true);
-    const [s, c, t] = await Promise.all([
+    const [s, c, t, cl, v] = await Promise.all([
       supabase.from("site_settings").select("*"),
       supabase.from("courses").select("*").order("sort_order"),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
+      supabase.from("link_clicks").select("*").order("created_at", { ascending: false }),
+      supabase.from("page_visits").select("*").order("created_at", { ascending: false }),
     ]);
     if (s.data) setSettings(s.data as Setting[]);
     if (c.data) setCourses(c.data as Course[]);
     if (t.data) setComments(t.data as Testimonial[]);
+    if (cl.data) setClicks(cl.data as ClickData[]);
+    if (v.data) setVisits(v.data as VisitData[]);
     setLoading(false);
   };
 
@@ -126,6 +150,68 @@ const AdminDashboard = () => {
     hero_description: "وصف الصفحة الرئيسية",
     total_students: "عدد الطلاب",
     total_batches: "عدد الدفعات",
+  };
+
+  // Analytics computed
+  const uniqueVisitors = new Set(visits.map(v => v.session_id)).size;
+  const totalPageViews = visits.length;
+
+  // Referral source chart data
+  const referrerMap: Record<string, number> = {};
+  visits.forEach(v => {
+    let source = "مباشر";
+    if (v.referrer) {
+      try {
+        const host = new URL(v.referrer).hostname;
+        if (host.includes("instagram")) source = "Instagram";
+        else if (host.includes("google")) source = "Google";
+        else if (host.includes("facebook") || host.includes("fb")) source = "Facebook";
+        else if (host.includes("t.co") || host.includes("twitter") || host.includes("x.com")) source = "Twitter/X";
+        else source = host;
+      } catch { source = "أخرى"; }
+    }
+    referrerMap[source] = (referrerMap[source] || 0) + 1;
+  });
+  const referrerChartData = Object.entries(referrerMap)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, value]) => ({ name, value }));
+
+  // CTA click ranking
+  const clickRanking: Record<string, number> = {};
+  clicks.forEach(c => { clickRanking[c.link_name] = (clickRanking[c.link_name] || 0) + 1; });
+  const clickChartData = Object.entries(clickRanking)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([name, count]) => ({ name: name.length > 25 ? name.slice(0, 22) + "..." : name, count }));
+
+  // Export PDF
+  const handleExportPDF = () => {
+    const content = `
+تقرير الإحصائيات - ${new Date().toLocaleDateString("ar")}
+========================================
+
+الزوار الفريدون: ${uniqueVisitors}
+مشاهدات الصفحات: ${totalPageViews}
+إجمالي الدورات: ${courses.length}
+إجمالي الطلاب: ${settings.find(s => s.key === "total_students")?.value || "0"}
+إجمالي التعليقات: ${comments.length}
+
+--- مصادر الزيارات ---
+${referrerChartData.map(r => `${r.name}: ${r.value}`).join("\n")}
+
+--- أكثر الروابط نقراً ---
+${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
+    `.trim();
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `AOT_Report_${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("تم تصدير التقرير");
   };
 
   if (!authed) {
@@ -370,36 +456,115 @@ const AdminDashboard = () => {
         {/* Analytics Tab */}
         {activeTab === "analytics" && (
           <div className="space-y-6">
+            {/* Export Button */}
+            <div className="flex justify-end">
+              <button onClick={handleExportPDF} className="flex items-center gap-2 bg-primary/20 hover:bg-primary/30 text-primary font-bold py-2 px-5 rounded-lg transition-colors text-sm border border-primary/30">
+                <FileDown className="w-4 h-4" />
+                تصدير التقرير
+              </button>
+            </div>
+
+            {/* Traffic Center */}
+            <div className={`${glassCard} p-6`}>
+              <h3 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-primary" />
+                مركز الزيارات
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className={`${glassCard} p-5 text-center`}>
+                  <Eye className="w-7 h-7 text-primary mx-auto mb-2" />
+                  <div className="text-3xl font-black text-primary">{uniqueVisitors}</div>
+                  <div className="text-sm text-muted-foreground">زوار فريدون</div>
+                </div>
+                <div className={`${glassCard} p-5 text-center`}>
+                  <Globe className="w-7 h-7 text-secondary mx-auto mb-2" />
+                  <div className="text-3xl font-black text-secondary">{totalPageViews}</div>
+                  <div className="text-sm text-muted-foreground">مشاهدات الصفحات</div>
+                </div>
+                <div className={`${glassCard} p-5 text-center`}>
+                  <MousePointerClick className="w-7 h-7 text-cyan-400 mx-auto mb-2" />
+                  <div className="text-3xl font-black text-cyan-400">{clicks.length}</div>
+                  <div className="text-sm text-muted-foreground">نقرات CTA</div>
+                </div>
+              </div>
+            </div>
+
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-card border border-border rounded-xl p-6 text-center">
+              <div className={`${glassCard} p-6 text-center`}>
                 <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
                 <div className="text-3xl font-black text-primary">{courses.length}</div>
                 <div className="text-sm text-muted-foreground">إجمالي الدورات</div>
               </div>
-              <div className="bg-card border border-border rounded-xl p-6 text-center">
+              <div className={`${glassCard} p-6 text-center`}>
                 <Users className="w-8 h-8 text-secondary mx-auto mb-2" />
                 <div className="text-3xl font-black text-secondary">
                   {settings.find(s => s.key === "total_students")?.value || "0"}
                 </div>
                 <div className="text-sm text-muted-foreground">إجمالي الطلاب</div>
               </div>
-              <div className="bg-card border border-border rounded-xl p-6 text-center">
+              <div className={`${glassCard} p-6 text-center`}>
                 <MessageCircle className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
                 <div className="text-3xl font-black text-cyan-400">{comments.length}</div>
                 <div className="text-sm text-muted-foreground">إجمالي التعليقات</div>
               </div>
             </div>
 
+            {/* Referral Sources Chart */}
+            <div className={`${glassCard} p-6`}>
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <Globe className="w-5 h-5 text-secondary" />
+                مصادر الزيارات
+              </h3>
+              {referrerChartData.length > 0 ? (
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={referrerChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
+                        {referrerChartData.map((_, i) => (
+                          <Cell key={i} fill={REFERRER_COLORS[i % REFERRER_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm text-center py-8">لا توجد بيانات حتى الآن</p>
+              )}
+            </div>
+
+            {/* CTA Click Ranking */}
+            <div className={`${glassCard} p-6`}>
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <MousePointerClick className="w-5 h-5 text-primary" />
+                أكثر الروابط نقراً
+              </h3>
+              {clickChartData.length > 0 ? (
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={clickChartData} layout="vertical" margin={{ right: 20 }}>
+                      <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                      <YAxis type="category" dataKey="name" width={160} stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                      <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }} />
+                      <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm text-center py-8">لا توجد نقرات حتى الآن</p>
+              )}
+            </div>
+
             {/* Course Stats */}
-            <div className="bg-card border border-border rounded-xl p-6">
+            <div className={`${glassCard} p-6`}>
               <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-primary" />
                 حالة الدورات
               </h3>
               <div className="space-y-3">
                 {courses.map(course => (
-                  <div key={course.id} className="flex items-center justify-between bg-muted rounded-lg px-4 py-3">
+                  <div key={course.id} className="flex items-center justify-between bg-muted/50 backdrop-blur-sm rounded-lg px-4 py-3">
                     <span className="font-medium text-foreground">{course.title}</span>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-muted-foreground">{course.price}</span>
@@ -417,26 +582,18 @@ const AdminDashboard = () => {
             </div>
 
             {/* Comments Stats */}
-            <div className="bg-card border border-border rounded-xl p-6">
+            <div className={`${glassCard} p-6`}>
               <h3 className="text-lg font-bold text-foreground mb-4">إحصائيات التعليقات</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center">
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center backdrop-blur-sm">
                   <div className="text-2xl font-black text-green-400">{approved.length}</div>
                   <div className="text-sm text-muted-foreground">معتمدة</div>
                 </div>
-                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-center">
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-center backdrop-blur-sm">
                   <div className="text-2xl font-black text-yellow-400">{pending.length}</div>
                   <div className="text-sm text-muted-foreground">بانتظار الموافقة</div>
                 </div>
               </div>
-            </div>
-
-            {/* Visitor Counter Note */}
-            <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="text-lg font-bold text-foreground mb-2">عداد الزوار</h3>
-              <p className="text-muted-foreground text-sm">
-                لتفعيل عداد الزوار، يمكنك ربط الموقع بـ Vercel Analytics أو Google Analytics من خلال إضافة كود التتبع في ملف index.html.
-              </p>
             </div>
           </div>
         )}
