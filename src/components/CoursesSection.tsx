@@ -1,13 +1,15 @@
 import { motion } from "framer-motion";
 import { Clock, Users, CalendarDays, MessageCircle, Award, BookOpen } from "lucide-react";
 import { useCourses, useSiteSettings } from "@/hooks/useSiteData";
+import { trackClick } from "@/lib/trackClick";
 
 const CoursesSection = () => {
   const { courses, loading } = useCourses();
   const { settings } = useSiteSettings();
   const whatsappNumber = settings.whatsapp_number || "962795130027";
 
-  const handleWhatsApp = (message: string) => {
+  const handleWhatsApp = (message: string, courseTitle: string) => {
+    trackClick(`Join Course: ${courseTitle}`, "cta");
     const encoded = encodeURIComponent(message);
     window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, "_blank");
   };
@@ -91,7 +93,7 @@ const CoursesSection = () => {
                     </div>
 
                     <button
-                      onClick={() => handleWhatsApp(course.whatsapp_message)}
+                      onClick={() => handleWhatsApp(course.whatsapp_message, course.title)}
                       className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
                     >
                       <MessageCircle className="w-5 h-5" />

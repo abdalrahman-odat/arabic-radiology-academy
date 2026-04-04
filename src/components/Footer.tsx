@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 import { useSiteSettings } from "@/hooks/useSiteData";
+import { trackClick } from "@/lib/trackClick";
 
 const Footer = () => {
   const { settings } = useSiteSettings();
@@ -29,7 +30,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-foreground mb-3">تواصل معنا</h4>
             <div className="space-y-2 text-sm">
-              <a href={`https://wa.me/${whatsappNumber}`} className="flex items-center gap-2 text-muted-foreground hover:text-secondary transition-colors">
+              <a href={`https://wa.me/${whatsappNumber}`} onClick={() => trackClick("WhatsApp Support", "contact")} className="flex items-center gap-2 text-muted-foreground hover:text-secondary transition-colors">
                 <MessageCircle className="w-4 h-4" />
                 واتساب: {whatsappNumber.replace("962", "0")}
               </a>
