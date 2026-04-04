@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState<"settings" | "courses" | "comments">("settings");
+  const [activeTab, setActiveTab] = useState<"settings" | "courses" | "comments" | "analytics">("settings");
   const [settings, setSettings] = useState<Setting[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [comments, setComments] = useState<Testimonial[]>([]);
