@@ -156,6 +156,7 @@ const AdminDashboard = () => {
     { id: "settings" as const, label: "⚙️ إعدادات الموقع" },
     { id: "courses" as const, label: "📚 إدارة الدورات" },
     { id: "comments" as const, label: "💬 التعليقات" },
+    { id: "analytics" as const, label: "📊 الإحصائيات" },
   ];
 
   const pending = comments.filter(c => !c.is_approved);
