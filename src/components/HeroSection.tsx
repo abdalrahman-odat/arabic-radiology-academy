@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Award, BookOpen, Users } from "lucide-react";
 import instructorImg from "@/assets/instructor.png";
+import logoImg from "@/assets/logo.png";
 import { useSiteSettings } from "@/hooks/useSiteData";
 
 const HeroSection = () => {
