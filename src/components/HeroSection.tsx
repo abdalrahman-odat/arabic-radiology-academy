@@ -69,7 +69,16 @@ const HeroSection = () => {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               className="relative"
             >
-              <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl scale-110" />
+              <div className="absolute inset-0 flex items-center justify-center scale-150">
+                <img
+                  src={logoImg}
+                  alt=""
+                  className="w-full h-full object-contain opacity-30"
+                  style={{
+                    filter: "drop-shadow(0 0 25px hsl(16 100% 50% / 0.6)) drop-shadow(0 0 50px hsl(16 100% 50% / 0.3))",
+                  }}
+                />
+              </div>
               <img
                 src={instructorImg}
                 alt={settings.instructor_name || "الأستاذ عبدالله عودات"}
