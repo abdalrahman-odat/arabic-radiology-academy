@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 import { useSiteSettings } from "@/hooks/useSiteData";
+import { trackClick } from "@/lib/trackClick";
 
 const Footer = () => {
   const { settings } = useSiteSettings();
