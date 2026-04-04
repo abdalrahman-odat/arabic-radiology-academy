@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { toast } from "sonner";
 import { Activity, ExternalLink } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -56,6 +57,7 @@ const App = () => (
         </Routes>
       </BrowserRouter>
       <RadiologyChat />
+      <Analytics />
     </TooltipProvider>
   </QueryClientProvider>
 );
