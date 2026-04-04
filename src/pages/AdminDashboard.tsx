@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowRight, Save, Plus, Trash2, Check } from "lucide-react";
+import { Lock, ArrowRight, Save, Plus, Trash2, Check, BarChart3, Users, BookOpen, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState<"settings" | "courses" | "comments">("settings");
+  const [activeTab, setActiveTab] = useState<"settings" | "courses" | "comments" | "analytics">("settings");
   const [settings, setSettings] = useState<Setting[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [comments, setComments] = useState<Testimonial[]>([]);
@@ -156,6 +156,7 @@ const AdminDashboard = () => {
     { id: "settings" as const, label: "⚙️ إعدادات الموقع" },
     { id: "courses" as const, label: "📚 إدارة الدورات" },
     { id: "comments" as const, label: "💬 التعليقات" },
+    { id: "analytics" as const, label: "📊 الإحصائيات" },
   ];
 
   const pending = comments.filter(c => !c.is_approved);
@@ -362,6 +363,80 @@ const AdminDashboard = () => {
                   </button>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Analytics Tab */}
+        {activeTab === "analytics" && (
+          <div className="space-y-6">
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-card border border-border rounded-xl p-6 text-center">
+                <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
+                <div className="text-3xl font-black text-primary">{courses.length}</div>
+                <div className="text-sm text-muted-foreground">إجمالي الدورات</div>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-6 text-center">
+                <Users className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <div className="text-3xl font-black text-secondary">
+                  {settings.find(s => s.key === "total_students")?.value || "0"}
+                </div>
+                <div className="text-sm text-muted-foreground">إجمالي الطلاب</div>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-6 text-center">
+                <MessageCircle className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
+                <div className="text-3xl font-black text-cyan-400">{comments.length}</div>
+                <div className="text-sm text-muted-foreground">إجمالي التعليقات</div>
+              </div>
+            </div>
+
+            {/* Course Stats */}
+            <div className="bg-card border border-border rounded-xl p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-primary" />
+                حالة الدورات
+              </h3>
+              <div className="space-y-3">
+                {courses.map(course => (
+                  <div key={course.id} className="flex items-center justify-between bg-muted rounded-lg px-4 py-3">
+                    <span className="font-medium text-foreground">{course.title}</span>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-muted-foreground">{course.price}</span>
+                      <span className={`text-xs font-bold px-2 py-1 rounded-full ${
+                        course.registration_status === "open"
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-destructive/20 text-destructive"
+                      }`}>
+                        {course.registration_status === "open" ? "مفتوح" : "مغلق"}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Comments Stats */}
+            <div className="bg-card border border-border rounded-xl p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4">إحصائيات التعليقات</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-black text-green-400">{approved.length}</div>
+                  <div className="text-sm text-muted-foreground">معتمدة</div>
+                </div>
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-black text-yellow-400">{pending.length}</div>
+                  <div className="text-sm text-muted-foreground">بانتظار الموافقة</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Visitor Counter Note */}
+            <div className="bg-card border border-border rounded-xl p-6">
+              <h3 className="text-lg font-bold text-foreground mb-2">عداد الزوار</h3>
+              <p className="text-muted-foreground text-sm">
+                لتفعيل عداد الزوار، يمكنك ربط الموقع بـ Vercel Analytics أو Google Analytics من خلال إضافة كود التتبع في ملف index.html.
+              </p>
             </div>
           </div>
         )}
