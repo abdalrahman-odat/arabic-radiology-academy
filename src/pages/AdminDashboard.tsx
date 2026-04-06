@@ -155,13 +155,37 @@ const AdminDashboard = () => {
     total_batches: "عدد الدفعات",
   };
 
+  // Time-range filter helper
+  const getTimeRangeMs = (range: TimeRange) => {
+    const now = Date.now();
+    if (range === "24h") return now - 24 * 60 * 60 * 1000;
+    if (range === "30d") return now - 30 * 24 * 60 * 60 * 1000;
+    return now - 90 * 24 * 60 * 60 * 1000;
+  };
+
+  const cutoff = getTimeRangeMs(timeRange);
+  const filteredVisits = visits.filter(v => new Date(v.created_at).getTime() >= cutoff);
+  const filteredClicks = clicks.filter(c => new Date(c.created_at).getTime() >= cutoff);
+  const filteredComments = comments.filter(c => new Date(c.created_at).getTime() >= getTimeRangeMs("90d"));
+
   // Analytics computed
-  const uniqueVisitors = new Set(visits.map(v => v.session_id)).size;
-  const totalPageViews = visits.length;
+  const uniqueVisitors = new Set(filteredVisits.map(v => v.session_id)).size;
+  const totalPageViews = filteredVisits.length;
+
+  // Growth percentage (this month vs previous 2 months average)
+  const now = Date.now();
+  const thisMonthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
+  const prevMonthStart = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1).getTime();
+  const prev2MonthStart = new Date(new Date().getFullYear(), new Date().getMonth() - 2, 1).getTime();
+  const visitsThisMonth = visits.filter(v => new Date(v.created_at).getTime() >= thisMonthStart).length;
+  const visitsPrevMonth = visits.filter(v => { const t = new Date(v.created_at).getTime(); return t >= prevMonthStart && t < thisMonthStart; }).length;
+  const visitsPrev2Month = visits.filter(v => { const t = new Date(v.created_at).getTime(); return t >= prev2MonthStart && t < prevMonthStart; }).length;
+  const prevAvg = (visitsPrevMonth + visitsPrev2Month) / 2;
+  const growthPercent = prevAvg > 0 ? Math.round(((visitsThisMonth - prevAvg) / prevAvg) * 100) : visitsThisMonth > 0 ? 100 : 0;
 
   // Referral source chart data
   const referrerMap: Record<string, number> = {};
-  visits.forEach(v => {
+  filteredVisits.forEach(v => {
     let source = "مباشر";
     if (v.referrer) {
       try {
@@ -182,7 +206,7 @@ const AdminDashboard = () => {
 
   // CTA click ranking
   const clickRanking: Record<string, number> = {};
-  clicks.forEach(c => { clickRanking[c.link_name] = (clickRanking[c.link_name] || 0) + 1; });
+  filteredClicks.forEach(c => { clickRanking[c.link_name] = (clickRanking[c.link_name] || 0) + 1; });
   const clickChartData = Object.entries(clickRanking)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8)
