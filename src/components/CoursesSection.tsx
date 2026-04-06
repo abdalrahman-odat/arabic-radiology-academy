@@ -93,14 +93,10 @@ const CoursesSection = () => {
 
                     <button
                       onClick={() => {
-  // هاد السطر بياخد الرسالة من الداتا وببدل أي كلمة x-ray بكلمة CT فوراً
-  const messageFromData = course.whatsapp_message || '';
-  const cleanMessage = messageFromData.replace(/x-ray/gi, 'CT');
-  
-  // إذا الرسالة كانت فاضية أصلاً، بنبعت رسالة افتراضية عن الـ CT
-  const finalMessage = cleanMessage || `مرحبا مهتم بكورس CT، ممكن تبعثلي التفاصيل؟`;
-  
-  handleWhatsApp(finalMessage, course.title);
+  const msg = course.title.toLowerCase().includes('ct') 
+    ? "مرحبا مهتم بكورس CT، ممكن تبعثلي التفاصيل؟" 
+    : "مرحبا مهتم بكورس X-Ray، ممكن تبعثلي التفاصيل؟";
+  window.open(`https://wa.me/962795130027?text=${encodeURIComponent(msg)}`, "_blank");
 }}
                       className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
                     >
