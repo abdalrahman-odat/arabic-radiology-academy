@@ -13,7 +13,6 @@ const CoursesSection = () => {
     const encoded = encodeURIComponent(message);
     window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, "_blank");
   };
-
   const activeCourses = courses.filter(c => c.is_active);
 
   return (
