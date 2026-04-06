@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowRight, Save, Plus, Trash2, Check, BarChart3, Users, BookOpen, MessageCircle, Globe, MousePointerClick, Eye, Clock, FileDown, TrendingUp } from "lucide-react";
+import { Lock, ArrowRight, Save, Plus, Trash2, Check, BarChart3, Users, BookOpen, MessageCircle, Globe, MousePointerClick, Eye, Clock, FileDown, TrendingUp, Smartphone, Monitor, MapPin, Radio } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend, CartesianGrid } from "recharts";
 
 const ADMIN_PASSWORD = "aot2025admin";
 
@@ -49,6 +49,7 @@ interface VisitData {
   page_path: string;
   referrer: string | null;
   session_id: string | null;
+  user_agent: string | null;
   created_at: string;
 }
 
@@ -211,6 +212,65 @@ const AdminDashboard = () => {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8)
     .map(([name, count]) => ({ name: name.length > 25 ? name.slice(0, 22) + "..." : name, count }));
+
+  // Daily traffic trend data
+  const dailyTrendData = (() => {
+    const days: Record<string, { date: string; visitors: Set<string>; views: number }> = {};
+    filteredVisits.forEach(v => {
+      const day = new Date(v.created_at).toLocaleDateString("ar-EG", { month: "short", day: "numeric" });
+      if (!days[day]) days[day] = { date: day, visitors: new Set(), views: 0 };
+      days[day].views++;
+      if (v.session_id) days[day].visitors.add(v.session_id);
+    });
+    return Object.values(days).map(d => ({ date: d.date, زوار: d.visitors.size, مشاهدات: d.views }));
+  })();
+
+  // Device type detection from user_agent
+  const deviceData = (() => {
+    let mobile = 0, desktop = 0;
+    filteredVisits.forEach(v => {
+      if (v.user_agent && /mobile|android|iphone|ipad/i.test(v.user_agent)) mobile++;
+      else desktop++;
+    });
+    return [
+      { name: "موبايل", value: mobile },
+      { name: "سطح المكتب", value: desktop },
+    ].filter(d => d.value > 0);
+  })();
+
+  // Location estimation from user_agent (timezone-based heuristic isn't available, use referrer domain TLD)
+  const locationData = (() => {
+    const locMap: Record<string, number> = {};
+    filteredVisits.forEach(v => {
+      // Simple heuristic: count by referrer or default to "غير محدد"
+      let loc = "غير محدد";
+      if (v.user_agent) {
+        // Detect common locale patterns in UA or just categorize
+        if (v.referrer) {
+          try {
+            const host = new URL(v.referrer).hostname;
+            if (host.includes(".jo") || host.includes("jordan")) loc = "الأردن";
+            else if (host.includes(".sa") || host.includes("saudi")) loc = "السعودية";
+            else if (host.includes(".eg") || host.includes("egypt")) loc = "مصر";
+            else if (host.includes(".dz") || host.includes("algeria")) loc = "الجزائر";
+            else loc = "أخرى";
+          } catch { /* */ }
+        }
+      }
+      locMap[loc] = (locMap[loc] || 0) + 1;
+    });
+    return Object.entries(locMap).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name, value]) => ({ name, value }));
+  })();
+
+  // Conversion rate: course CTA clicks / unique visitors
+  const courseClicks = filteredClicks.filter(c => c.link_category === "cta" && c.link_name.startsWith("Join Course")).length;
+  const conversionRate = uniqueVisitors > 0 ? ((courseClicks / uniqueVisitors) * 100).toFixed(1) : "0.0";
+
+  // Live sessions (visits in last 5 minutes)
+  const fiveMinAgo = Date.now() - 5 * 60 * 1000;
+  const liveSessions = new Set(visits.filter(v => new Date(v.created_at).getTime() >= fiveMinAgo).map(v => v.session_id)).size;
+
+  const DEVICE_COLORS = ["#06b6d4", "hsl(var(--primary))"];
 
   // Export PDF
   const handleExportPDF = () => {
@@ -483,19 +543,26 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
         {/* Analytics Tab */}
         {activeTab === "analytics" && (
           <div className="space-y-6">
-            {/* Time Range Filter + Export */}
+            {/* Top Bar: Live Indicator + Time Filter + Export */}
             <div className="flex items-center justify-between flex-wrap gap-3">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-muted-foreground" />
-                <select
-                  value={timeRange}
-                  onChange={(e) => setTimeRange(e.target.value as TimeRange)}
-                  className="bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                >
-                  <option value="24h">آخر 24 ساعة</option>
-                  <option value="30d">آخر 30 يوم</option>
-                  <option value="90d">آخر 90 يوم</option>
-                </select>
+              <div className="flex items-center gap-4">
+                {/* Live Indicator */}
+                <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-full px-3 py-1.5">
+                  <Radio className="w-3.5 h-3.5 text-green-400 animate-pulse" />
+                  <span className="text-xs font-bold text-green-400">{liveSessions} مباشر الآن</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-muted-foreground" />
+                  <select
+                    value={timeRange}
+                    onChange={(e) => setTimeRange(e.target.value as TimeRange)}
+                    className="bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  >
+                    <option value="24h">آخر 24 ساعة</option>
+                    <option value="30d">آخر 30 يوم</option>
+                    <option value="90d">آخر 90 يوم</option>
+                  </select>
+                </div>
               </div>
               <button onClick={handleExportPDF} className="flex items-center gap-2 bg-primary/20 hover:bg-primary/30 text-primary font-bold py-2 px-5 rounded-lg transition-colors text-sm border border-primary/30">
                 <FileDown className="w-4 h-4" />
@@ -503,32 +570,62 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
               </button>
             </div>
 
-            {/* Traffic Center */}
+            {/* Traffic Center Cards */}
             <div className={`${glassCard} p-6`}>
               <h3 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-primary" />
                 مركز الزيارات
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className={`${glassCard} p-5 text-center`}>
-                  <Eye className="w-7 h-7 text-primary mx-auto mb-2" />
-                  <div className="text-3xl font-black text-primary">{uniqueVisitors}</div>
-                  <div className="text-sm text-muted-foreground">زوار فريدون</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className={`${glassCard} p-4 text-center`}>
+                  <Eye className="w-6 h-6 text-primary mx-auto mb-1" />
+                  <div className="text-2xl font-black text-primary">{uniqueVisitors}</div>
+                  <div className="text-xs text-muted-foreground">زوار فريدون</div>
                 </div>
-                <div className={`${glassCard} p-5 text-center`}>
-                  <Globe className="w-7 h-7 text-secondary mx-auto mb-2" />
-                  <div className="text-3xl font-black text-secondary">{totalPageViews}</div>
-                  <div className="text-sm text-muted-foreground">مشاهدات الصفحات</div>
+                <div className={`${glassCard} p-4 text-center`}>
+                  <Globe className="w-6 h-6 text-secondary mx-auto mb-1" />
+                  <div className="text-2xl font-black text-secondary">{totalPageViews}</div>
+                  <div className="text-xs text-muted-foreground">مشاهدات</div>
                 </div>
-                <div className={`${glassCard} p-5 text-center`}>
-                  <MousePointerClick className="w-7 h-7 text-cyan-400 mx-auto mb-2" />
-                  <div className="text-3xl font-black text-cyan-400">{filteredClicks.length}</div>
-                  <div className="text-sm text-muted-foreground">نقرات CTA</div>
+                <div className={`${glassCard} p-4 text-center`}>
+                  <MousePointerClick className="w-6 h-6 text-cyan-400 mx-auto mb-1" />
+                  <div className="text-2xl font-black text-cyan-400">{filteredClicks.length}</div>
+                  <div className="text-xs text-muted-foreground">نقرات CTA</div>
+                </div>
+                <div className={`${glassCard} p-4 text-center`}>
+                  <TrendingUp className="w-6 h-6 text-green-400 mx-auto mb-1" />
+                  <div className="text-2xl font-black text-green-400">{conversionRate}%</div>
+                  <div className="text-xs text-muted-foreground">معدل التحويل</div>
                 </div>
               </div>
             </div>
 
-            {/* Summary Cards */}
+            {/* Daily Traffic Line Chart */}
+            <div className={`${glassCard} p-6`}>
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-primary" />
+                حركة الزيارات اليومية
+              </h3>
+              {dailyTrendData.length > 0 ? (
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={dailyTrendData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                      <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, direction: "rtl" }} />
+                      <Legend />
+                      <Line type="monotone" dataKey="زوار" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="مشاهدات" stroke="hsl(var(--secondary))" strokeWidth={2} dot={{ r: 3 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm text-center py-8">لا توجد بيانات كافية لعرض الرسم البياني</p>
+              )}
+            </div>
+
+            {/* Summary Cards with Growth */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className={`${glassCard} p-6 text-center`}>
                 <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
@@ -558,6 +655,57 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
                 <MessageCircle className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
                 <div className="text-3xl font-black text-cyan-400">{filteredComments.length}</div>
                 <div className="text-sm text-muted-foreground">التعليقات (90 يوم)</div>
+              </div>
+            </div>
+
+            {/* Two small pie charts: Device + Location */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Device Types */}
+              <div className={`${glassCard} p-6`}>
+                <h3 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-cyan-400" />
+                  نوع الجهاز
+                </h3>
+                {deviceData.length > 0 ? (
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie data={deviceData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={35} outerRadius={70} label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
+                          {deviceData.map((_, i) => (
+                            <Cell key={i} fill={DEVICE_COLORS[i % DEVICE_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-sm text-center py-6">لا توجد بيانات</p>
+                )}
+              </div>
+
+              {/* Top Locations */}
+              <div className={`${glassCard} p-6`}>
+                <h3 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-secondary" />
+                  المواقع الجغرافية
+                </h3>
+                {locationData.length > 0 ? (
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie data={locationData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={35} outerRadius={70} label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}>
+                          {locationData.map((_, i) => (
+                            <Cell key={i} fill={REFERRER_COLORS[i % REFERRER_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-sm text-center py-6">لا توجد بيانات</p>
+                )}
               </div>
             </div>
 
@@ -607,18 +755,17 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
               )}
             </div>
 
-            {/* Course Stats */}
-            <div className={`${glassCard} p-6`}>
-              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-primary" />
-                حالة الدورات
-              </h3>
-              <div className="space-y-3">
-                {courses.map(course => (
-                  <div key={course.id} className="flex items-center justify-between bg-muted/50 backdrop-blur-sm rounded-lg px-4 py-3">
-                    <span className="font-medium text-foreground">{course.title}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm text-muted-foreground">{course.price}</span>
+            {/* Course Stats + Comments Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className={`${glassCard} p-6`}>
+                <h3 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  حالة الدورات
+                </h3>
+                <div className="space-y-3">
+                  {courses.map(course => (
+                    <div key={course.id} className="flex items-center justify-between bg-muted/50 backdrop-blur-sm rounded-lg px-4 py-3">
+                      <span className="font-medium text-foreground text-sm">{course.title}</span>
                       <span className={`text-xs font-bold px-2 py-1 rounded-full ${
                         course.registration_status === "open"
                           ? "bg-green-500/20 text-green-400"
@@ -627,22 +774,20 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
                         {course.registration_status === "open" ? "مفتوح" : "مغلق"}
                       </span>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Comments Stats */}
-            <div className={`${glassCard} p-6`}>
-              <h3 className="text-lg font-bold text-foreground mb-4">إحصائيات التعليقات</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center backdrop-blur-sm">
-                  <div className="text-2xl font-black text-green-400">{approved.length}</div>
-                  <div className="text-sm text-muted-foreground">معتمدة</div>
+                  ))}
                 </div>
-                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-center backdrop-blur-sm">
-                  <div className="text-2xl font-black text-yellow-400">{pending.length}</div>
-                  <div className="text-sm text-muted-foreground">بانتظار الموافقة</div>
+              </div>
+              <div className={`${glassCard} p-6`}>
+                <h3 className="text-base font-bold text-foreground mb-4">إحصائيات التعليقات</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center backdrop-blur-sm">
+                    <div className="text-2xl font-black text-green-400">{approved.length}</div>
+                    <div className="text-sm text-muted-foreground">معتمدة</div>
+                  </div>
+                  <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-center backdrop-blur-sm">
+                    <div className="text-2xl font-black text-yellow-400">{pending.length}</div>
+                    <div className="text-sm text-muted-foreground">بانتظار الموافقة</div>
+                  </div>
                 </div>
               </div>
             </div>
