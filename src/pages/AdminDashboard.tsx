@@ -207,10 +207,65 @@ const AdminDashboard = () => {
   // CTA click ranking
   const clickRanking: Record<string, number> = {};
   filteredClicks.forEach(c => { clickRanking[c.link_name] = (clickRanking[c.link_name] || 0) + 1; });
-  const clickChartData = Object.entries(clickRanking)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 8)
-    .map(([name, count]) => ({ name: name.length > 25 ? name.slice(0, 22) + "..." : name, count }));
+
+  // Daily traffic trend data
+  const dailyTrendData = (() => {
+    const days: Record<string, { date: string; visitors: Set<string>; views: number }> = {};
+    filteredVisits.forEach(v => {
+      const day = new Date(v.created_at).toLocaleDateString("ar-EG", { month: "short", day: "numeric" });
+      if (!days[day]) days[day] = { date: day, visitors: new Set(), views: 0 };
+      days[day].views++;
+      if (v.session_id) days[day].visitors.add(v.session_id);
+    });
+    return Object.values(days).map(d => ({ date: d.date, زوار: d.visitors.size, مشاهدات: d.views }));
+  })();
+
+  // Device type detection from user_agent
+  const deviceData = (() => {
+    let mobile = 0, desktop = 0;
+    filteredVisits.forEach(v => {
+      if (v.user_agent && /mobile|android|iphone|ipad/i.test(v.user_agent)) mobile++;
+      else desktop++;
+    });
+    return [
+      { name: "موبايل", value: mobile },
+      { name: "سطح المكتب", value: desktop },
+    ].filter(d => d.value > 0);
+  })();
+
+  // Location estimation from user_agent (timezone-based heuristic isn't available, use referrer domain TLD)
+  const locationData = (() => {
+    const locMap: Record<string, number> = {};
+    filteredVisits.forEach(v => {
+      // Simple heuristic: count by referrer or default to "غير محدد"
+      let loc = "غير محدد";
+      if (v.user_agent) {
+        // Detect common locale patterns in UA or just categorize
+        if (v.referrer) {
+          try {
+            const host = new URL(v.referrer).hostname;
+            if (host.includes(".jo") || host.includes("jordan")) loc = "الأردن";
+            else if (host.includes(".sa") || host.includes("saudi")) loc = "السعودية";
+            else if (host.includes(".eg") || host.includes("egypt")) loc = "مصر";
+            else if (host.includes(".dz") || host.includes("algeria")) loc = "الجزائر";
+            else loc = "أخرى";
+          } catch { /* */ }
+        }
+      }
+      locMap[loc] = (locMap[loc] || 0) + 1;
+    });
+    return Object.entries(locMap).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name, value]) => ({ name, value }));
+  })();
+
+  // Conversion rate: course CTA clicks / unique visitors
+  const courseClicks = filteredClicks.filter(c => c.link_category === "cta" && c.link_name.startsWith("Join Course")).length;
+  const conversionRate = uniqueVisitors > 0 ? ((courseClicks / uniqueVisitors) * 100).toFixed(1) : "0.0";
+
+  // Live sessions (visits in last 5 minutes)
+  const fiveMinAgo = Date.now() - 5 * 60 * 1000;
+  const liveSessions = new Set(visits.filter(v => new Date(v.created_at).getTime() >= fiveMinAgo).map(v => v.session_id)).size;
+
+  const DEVICE_COLORS = ["#06b6d4", "hsl(var(--primary))"];
 
   // Export PDF
   const handleExportPDF = () => {
