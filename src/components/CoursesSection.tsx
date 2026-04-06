@@ -28,7 +28,7 @@ const CoursesSection = () => {
             الدورات المتاحة
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            اختر الدورة المناسبة لك وابدأ رحلتك في عالم الأشعة التشخيصية
+            اختر الدورة المناسبة لك وابدا رحلتك في عالم الأشعة التشخيصية
           </p>
         </motion.div>
 
