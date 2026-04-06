@@ -208,6 +208,10 @@ const AdminDashboard = () => {
   // CTA click ranking
   const clickRanking: Record<string, number> = {};
   filteredClicks.forEach(c => { clickRanking[c.link_name] = (clickRanking[c.link_name] || 0) + 1; });
+  const clickChartData = Object.entries(clickRanking)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([name, count]) => ({ name: name.length > 25 ? name.slice(0, 22) + "..." : name, count }));
 
   // Daily traffic trend data
   const dailyTrendData = (() => {
