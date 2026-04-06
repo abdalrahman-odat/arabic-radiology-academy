@@ -49,6 +49,7 @@ interface VisitData {
   page_path: string;
   referrer: string | null;
   session_id: string | null;
+  user_agent: string | null;
   created_at: string;
 }
 
