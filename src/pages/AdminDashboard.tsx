@@ -56,6 +56,8 @@ const REFERRER_COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "#06b6d
 
 const glassCard = "backdrop-blur-md bg-card/60 border border-border/40 rounded-xl shadow-lg shadow-primary/5";
 
+type TimeRange = "24h" | "30d" | "90d";
+
 const AdminDashboard = () => {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
@@ -67,6 +69,7 @@ const AdminDashboard = () => {
   const [clicks, setClicks] = useState<ClickData[]>([]);
   const [visits, setVisits] = useState<VisitData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [timeRange, setTimeRange] = useState<TimeRange>("90d");
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
