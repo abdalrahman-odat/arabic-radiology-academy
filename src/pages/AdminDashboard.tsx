@@ -483,8 +483,20 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
         {/* Analytics Tab */}
         {activeTab === "analytics" && (
           <div className="space-y-6">
-            {/* Export Button */}
-            <div className="flex justify-end">
+            {/* Time Range Filter + Export */}
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-muted-foreground" />
+                <select
+                  value={timeRange}
+                  onChange={(e) => setTimeRange(e.target.value as TimeRange)}
+                  className="bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
+                  <option value="24h">آخر 24 ساعة</option>
+                  <option value="30d">آخر 30 يوم</option>
+                  <option value="90d">آخر 90 يوم</option>
+                </select>
+              </div>
               <button onClick={handleExportPDF} className="flex items-center gap-2 bg-primary/20 hover:bg-primary/30 text-primary font-bold py-2 px-5 rounded-lg transition-colors text-sm border border-primary/30">
                 <FileDown className="w-4 h-4" />
                 تصدير التقرير
@@ -510,7 +522,7 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
                 </div>
                 <div className={`${glassCard} p-5 text-center`}>
                   <MousePointerClick className="w-7 h-7 text-cyan-400 mx-auto mb-2" />
-                  <div className="text-3xl font-black text-cyan-400">{clicks.length}</div>
+                  <div className="text-3xl font-black text-cyan-400">{filteredClicks.length}</div>
                   <div className="text-sm text-muted-foreground">نقرات CTA</div>
                 </div>
               </div>
@@ -525,15 +537,27 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
               </div>
               <div className={`${glassCard} p-6 text-center`}>
                 <Users className="w-8 h-8 text-secondary mx-auto mb-2" />
-                <div className="text-3xl font-black text-secondary">
-                  {settings.find(s => s.key === "total_students")?.value || "0"}
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-3xl font-black text-secondary">
+                    {settings.find(s => s.key === "total_students")?.value || "0"}
+                  </span>
+                  {growthPercent !== 0 && (
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5 ${
+                      growthPercent > 0
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-destructive/20 text-destructive"
+                    }`}>
+                      <TrendingUp className={`w-3 h-3 ${growthPercent < 0 ? "rotate-180" : ""}`} />
+                      {growthPercent > 0 ? "+" : ""}{growthPercent}%
+                    </span>
+                  )}
                 </div>
                 <div className="text-sm text-muted-foreground">إجمالي الطلاب</div>
               </div>
               <div className={`${glassCard} p-6 text-center`}>
                 <MessageCircle className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
-                <div className="text-3xl font-black text-cyan-400">{comments.length}</div>
-                <div className="text-sm text-muted-foreground">إجمالي التعليقات</div>
+                <div className="text-3xl font-black text-cyan-400">{filteredComments.length}</div>
+                <div className="text-sm text-muted-foreground">التعليقات (90 يوم)</div>
               </div>
             </div>
 
