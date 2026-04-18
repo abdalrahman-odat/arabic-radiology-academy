@@ -1,11 +1,19 @@
 import { motion } from "framer-motion";
-import { Award, BookOpen, Users } from "lucide-react";
+import { Award, BookOpen, Users, MessageCircle } from "lucide-react";
 import instructorImg from "@/assets/instructor.png";
 import logoImg from "@/assets/logo.png";
 import { useSiteSettings } from "@/hooks/useSiteData";
+import { trackClick } from "@/lib/trackClick";
 
 const HeroSection = () => {
   const { settings } = useSiteSettings();
+  const whatsappNumber = settings.whatsapp_number || "962795130027";
+
+  const handleHeroWhatsApp = () => {
+    trackClick("Hero WhatsApp Contact", "cta");
+    const msg = encodeURIComponent("مرحبا، أرغب بالاستفسار عن دورات الأشعة");
+    window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, "_blank");
+  };
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -37,6 +45,16 @@ const HeroSection = () => {
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto md:mx-0 mb-10 leading-relaxed">
               {settings.hero_description || "دورات تدريبية احترافية في CT و X-Ray مع الأستاذ عبدالله عودات — ماجستير في تخصص الأشعة ومدرب سريري في مستشفى السعودي"}
             </p>
+
+            <div className="mb-10 flex justify-center md:justify-start">
+              <button
+                onClick={handleHeroWhatsApp}
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/30"
+              >
+                <MessageCircle className="w-5 h-5" />
+                تواصل معنا عبر واتساب
+              </button>
+            </div>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-8 md:gap-12">
               {[

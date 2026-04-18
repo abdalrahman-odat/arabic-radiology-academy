@@ -35,7 +35,7 @@ const CoursesSection = () => {
         {loading ? (
           <p className="text-center text-muted-foreground">جارٍ التحميل...</p>
         ) : (
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {activeCourses.map((course, i) => {
               const isOpen = (course as any).registration_status !== "closed";
               const buttonText = (course as any).button_text || "سجل الآن عبر واتساب";
@@ -93,9 +93,13 @@ const CoursesSection = () => {
 
                     <button
                       onClick={() => {
-  const msg = "مرحبا مهتم بكورس CT، ممكن تبعثلي التفاصيل؟";
-  window.open(`https://wa.me/962795130027?text=${encodeURIComponent(msg)}`, "_blank");
-}}
+                        const isXray = course.title.includes("X-Ray") || course.title.toLowerCase().includes("x-ray");
+                        const defaultMsg = isXray
+                          ? "مرحبا مهتم بدورة X-Ray، ممكن تبعثلي التفاصيل؟"
+                          : "مرحبا مهتم بكورس CT، ممكن تبعثلي التفاصيل؟";
+                        const msg = (course as any).whatsapp_message || defaultMsg;
+                        handleWhatsApp(msg, course.title);
+                      }}
                       className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-all hover:shadow-lg hover:shadow-primary/20"
                     >
                       <MessageCircle className="w-5 h-5" />
