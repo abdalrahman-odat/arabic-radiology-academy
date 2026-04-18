@@ -54,8 +54,9 @@ const CoursesSection = () => {
                 <h3 className="text-xl font-bold text-foreground mb-4 mt-2">{course.title}</h3>
 
                 {(course.title.includes("X-Ray") || course.title.toLowerCase().includes("x-ray")) && (
-                  <div className="bg-primary text-primary-foreground font-bold text-center rounded-lg px-4 py-3 mb-4 shadow-md">
-                    تم تقديمها 4 مرات لـ 80+ طالب
+                  <div className="flex items-center gap-2 text-sm text-primary mb-4 bg-primary/10 rounded-lg px-3 py-2">
+                    <BookOpen className="w-4 h-4 flex-shrink-0" />
+                    <span className="font-medium">تم تقديمها 4 مرات لـ 80+ طالب</span>
                   </div>
                 )}
 
