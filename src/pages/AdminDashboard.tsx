@@ -154,6 +154,8 @@ const AdminDashboard = () => {
     hero_description: "وصف الصفحة الرئيسية",
     total_students: "عدد الطلاب",
     total_batches: "عدد الدفعات",
+    floating_widget_text: "نص العنصر العائم",
+    floating_widget_url: "رابط الملف/الصفحة",
   };
 
   // Time-range filter helper
