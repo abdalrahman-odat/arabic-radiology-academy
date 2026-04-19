@@ -154,6 +154,8 @@ const AdminDashboard = () => {
     hero_description: "وصف الصفحة الرئيسية",
     total_students: "عدد الطلاب",
     total_batches: "عدد الدفعات",
+    floating_widget_text: "نص العنصر العائم",
+    floating_widget_url: "رابط الملف/الصفحة",
   };
 
   // Time-range filter helper
@@ -369,7 +371,7 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
         {/* Settings Tab */}
         {activeTab === "settings" && (
           <div className="space-y-4">
-            {settings.map(s => (
+            {settings.filter(s => !s.key.startsWith("floating_widget")).map(s => (
               <div key={s.id} className="bg-card border border-border rounded-lg p-4">
                 <label className="block text-sm font-bold text-foreground mb-2">
                   {settingLabels[s.key] || s.key}
@@ -390,6 +392,26 @@ ${clickChartData.map(c => `${c.name}: ${c.count}`).join("\n")}
                 )}
               </div>
             ))}
+
+            {settings.some(s => s.key.startsWith("floating_widget")) && (
+              <div className="bg-card border border-primary/30 rounded-lg p-4 space-y-4">
+                <h3 className="text-base font-bold text-primary">إعدادات العنصر العائم</h3>
+                {settings.filter(s => s.key.startsWith("floating_widget")).map(s => (
+                  <div key={s.id}>
+                    <label className="block text-sm font-bold text-foreground mb-2">
+                      {settingLabels[s.key] || s.key}
+                    </label>
+                    <input
+                      value={s.value}
+                      onChange={(e) => updateSetting(s.id, e.target.value)}
+                      placeholder={s.key === "floating_widget_url" ? "اتركه فارغاً لإخفاء العنصر" : ""}
+                      className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
             <button onClick={saveSettings} className="flex items-center gap-2 bg-primary text-primary-foreground font-bold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors">
               <Save className="w-4 h-4" />
               حفظ الإعدادات
