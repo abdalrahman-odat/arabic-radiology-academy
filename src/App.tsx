@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
 import RadiologyChat from "./components/RadiologyChat";
+import { ThemeProvider } from "./components/ThemeProvider";
 import { useSiteSettings } from "./hooks/useSiteData";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const MeetingToast = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <ThemeProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -61,6 +63,7 @@ const App = () => (
       <RadiologyChat />
       <Analytics />
     </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
